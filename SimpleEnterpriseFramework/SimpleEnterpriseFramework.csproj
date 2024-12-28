@@ -103,7 +103,10 @@
   <ItemGroup>
     <Compile Include="DBSetting\Database.cs" />
     <Compile Include="DBSetting\Membership\HashPassword.cs" />
+    <Compile Include="DBSetting\SingletonDatabase.cs" />
     <Compile Include="DBSetting\SQLServer\SQLServer.cs" />
+    <Compile Include="DBSetting\SQLServer\SQLServerDAO.cs" />
+    <Compile Include="DBSetting\SQLServer\SQLServerProcessor.cs" />
     <Compile Include="RegisterForm.cs">
       <SubType>Form</SubType>
     </Compile>
