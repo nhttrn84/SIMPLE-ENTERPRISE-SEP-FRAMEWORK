@@ -10,17 +10,58 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SimpleEnterpriseFramework.DBSetting.Membership.HashPassword;
 using SimpleEnterpriseFramework.DBSetting.SQLServer;
-
+using SimpleEnterpriseFramework.Interfaces.Authenticate;
 
 namespace SimpleEnterpriseFramework
 {
-    public partial class RegisterForm : Form
+    public partial class RegisterForm : Form, IAuthenticateForm
     {
         public RegisterForm()
         {
             InitializeComponent();
         }
 
+        public event EventHandler SubmitClicked;
+        public event EventHandler SwitchClicked;
+
+
+        private void RegisterForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        public void ShowForm()
+        {
+            this.Show();
+ 
+        }
+
+        public void HideForm()
+        {
+            this.Hide();
+ 
+        }
+
+        public void ShowError(string errorMessage)
+        {
+            MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+ 
+        }
+        // Gọi sự kiện đăng nhập khi người dùng nhấn nút đăng nhập
+        private void OnRegisterClicked()
+        {
+            SubmitClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnLoginClicked()
+        {
+            SwitchClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void SetTables(List<string> tables)
+        {
+ 
+        }
         private void textUserName_Enter(object sender, EventArgs e)
         {
             if (txtUserNameRegister.Text == "Account" || txtUserNameRegister.Text == "! Chưa có dữ liệu")
@@ -77,7 +118,7 @@ namespace SimpleEnterpriseFramework
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            this.Hide();
+            HideForm();
             LoginForm login = new LoginForm();
             login.ShowDialog();
         }
@@ -172,5 +213,6 @@ namespace SimpleEnterpriseFramework
                 }
             }
         }
+
     }
 }
