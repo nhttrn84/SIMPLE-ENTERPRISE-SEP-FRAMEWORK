@@ -17,7 +17,6 @@ namespace SimpleEnterpriseFramework
         public event EventHandler SubmitClicked;
         public event EventHandler SwitchClicked;
 
-
         public LoginForm(string name) : base(name, "Login Form", new Size(width: 800, height: 480))
         {
             InitializeComponent();
@@ -29,9 +28,9 @@ namespace SimpleEnterpriseFramework
                 .Text("Login")
                 .BackgroundColor(Color.Black)
                 .ContentColor(Color.White)
-                .Position(new Point(45, 328))
-                .Size(new Size(373, 43))
-                .ClickHandler((sender, e) => login_Click(sender, e)).Build();
+                .Size(new Size(300, 45))
+                .ClickHandler((sender, e) => login_Click(sender, e))
+                .Build();
 
             usernameTextBox = new BasicTextBoxBuilder()
                 .Name("usernameTextBox")
@@ -41,9 +40,9 @@ namespace SimpleEnterpriseFramework
                 .ContentColor(SystemColors.InfoText)
                 .BorderStyle(BorderStyle.FixedSingle)
                 .Size(new Size(306, 20))
-                .Position(new Point(45, 140))
                 .EnterEventHandler((sender, e) => { textUserName_Enter(sender, e); })
-                .LeaveEventHandler((sender, e) => { textUserName_Leave(sender, e); }).Build();
+                .LeaveEventHandler((sender, e) => { textUserName_Leave(sender, e); })
+                .Build();
 
             passwordTextBox = new BasicTextBoxBuilder()
                 .Name("passwordTextBox")
@@ -54,17 +53,34 @@ namespace SimpleEnterpriseFramework
                 .ContentColor(SystemColors.ScrollBar)
                 .BorderStyle(BorderStyle.FixedSingle)
                 .Size(new Size(306, 20))
-                .Position(new Point(20, 216))
                 .EnterEventHandler((sender, e) => { textPassword_Enter(sender, e); })
-                .LeaveEventHandler((sender, e) => { textPassword_Leave(sender, e); }).Build();
+                .LeaveEventHandler((sender, e) => { textPassword_Leave(sender, e); })
+                .Build();
 
-            builder.AddButton(loginButton);
             builder.AddFormText(usernameTextBox, "Username");
             builder.AddFormText(passwordTextBox, "Password");
+            builder.AddButton(loginButton);
+
+            // Create a container panel to center the form
+            Panel container = new Panel
+            {
+                Dock = DockStyle.None,
+                Size = new Size(370, 285),
+                BackColor = Color.LightGray
+            };
+
+            // Center the container within the form
+            container.Location = new Point((this.ClientSize.Width - container.Width) / 2,
+                                           (this.ClientSize.Height - container.Height) / 2);
+
+            container.Anchor = AnchorStyles.None;
+
+            // Add the built form to the container
+            container.Controls.Add(builder.Build());
+
             SuspendLayout();
             this.Controls.Clear();
-            this.Controls.Add(builder.Build());
-            Console.WriteLine("Reached here");
+            this.Controls.Add(container);
             ResumeLayout(false);
         }
 

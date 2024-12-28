@@ -37,49 +37,88 @@ namespace SimpleEnterpriseFramework
 
         public Panel Build()
         {
-            PanelSet panelSet = new PanelSet();
-            
-            main = panelSet.CreateFLPanelControls("main", new Size(468, 452), new Point(335, 0), 1, SystemColors.ButtonHighlight);
+            // Create the main panel to hold everything
+            Panel mainPanel = new Panel()
+            {
+                Dock = DockStyle.Fill,
+                BackColor = SystemColors.ButtonHighlight
+            };
 
+            // Create a TableLayoutPanel to center-align the content
+            TableLayoutPanel centerPanel = new TableLayoutPanel()
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 1,
+                RowCount = 1,
+                BackColor = SystemColors.ButtonHighlight
+            };
+            centerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            centerPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            mainPanel.Controls.Add(centerPanel);
 
+            // Create a FlowLayoutPanel (StackPanel1) for the overall layout
+            FlowLayoutPanel stackPanel1 = new FlowLayoutPanel()
+            {
+                Name = "stackPanel1",
+                FlowDirection = FlowDirection.TopDown,
+                AutoSize = true,
+                Padding = new Padding(20),
+                BackColor = SystemColors.ControlLight
+            };
+
+            // Add the title to StackPanel1
             Label titleLabel = new Label()
             {
                 Name = "titleLabel",
-                Text = "Login Form", // Nội dung của Title
+                Text = title ?? "Default Title",
                 Font = new Font("Arial", 16, FontStyle.Bold),
                 ForeColor = Color.Black,
                 TextAlign = ContentAlignment.MiddleCenter,
-                Dock = DockStyle.Top, // Đặt Dock để luôn nằm trên cùng
-                Height = 50 // Chiều cao của Label
+                AutoSize = true
             };
-            main.Controls.Add(titleLabel);
+            stackPanel1.Controls.Add(titleLabel);
 
-            TableLayoutPanel tlb = panelSet.CreateTLP("main", textFields);
-            tlb.Padding = new Padding(10, 20, 10, 20);
-            tlb.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single; // Tạo viền ô (nếu muốn)
-            main.Controls.Add(tlb);
-
-            // Tạo FlowLayoutPanel cho các nút
-            FlowLayoutPanel buttonPanel = new FlowLayoutPanel()
+            // Create StackPanel2 for form text fields
+            FlowLayoutPanel stackPanel2 = new FlowLayoutPanel()
             {
-                Name = "buttonPanel",
-                Dock = DockStyle.Bottom,
+                Name = "stackPanel2",
+                FlowDirection = FlowDirection.TopDown,
                 AutoSize = true,
-                BackColor = SystemColors.Control
+                Padding = new Padding(10),
+                BackColor = SystemColors.ControlLight
             };
 
-            foreach (var button in buttons)
-            {// Tạo khoảng cách giữa các nút
-                buttonPanel.Controls.Add(button);
+            // Add form text fields to StackPanel2
+            foreach (var textField in textFields)
+            {
+                stackPanel2.Controls.Add(textField.ControlLabel);
+                stackPanel2.Controls.Add(textField.ControlTextBox);
             }
+            stackPanel1.Controls.Add(stackPanel2);
 
-            main.Controls.Add(buttonPanel);
+            // Create StackPanel3 for buttons
+            FlowLayoutPanel stackPanel3 = new FlowLayoutPanel()
+            {
+                Name = "stackPanel3",
+                FlowDirection = FlowDirection.LeftToRight,
+                AutoSize = true,
+                Padding = new Padding(10),
+                BackColor = SystemColors.ControlDark
+            };
 
-            // Sắp xếp thứ tự các phần tử
-            main.Controls.SetChildIndex(titleLabel, 3); // Tiêu đề trên cùng
-            main.Controls.SetChildIndex(tlb, 0);       // Nội dung ở giữa Nút ở dưới
+            // Add buttons to StackPanel3
+            foreach (var button in buttons)
+            {
+                stackPanel3.Controls.Add(button);
+            }
+            stackPanel1.Controls.Add(stackPanel3);
 
-            return main;
+            // Add StackPanel1 to the TableLayoutPanel and center it
+            centerPanel.Controls.Add(stackPanel1);
+            centerPanel.SetColumn(stackPanel1, 0);
+            centerPanel.SetRow(stackPanel1, 0);
+
+            return mainPanel;
         }
 
         public IFormBuilder AddButton(Button button)
