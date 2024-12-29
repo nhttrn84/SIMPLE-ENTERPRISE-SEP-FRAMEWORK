@@ -7,6 +7,8 @@ using System.Windows.Forms;
 using SimpleEnterpriseFramework.DBSetting.SQLServer;
 using SimpleEnterpriseFramework.DBSetting.Membership.HashPassword;
 using SimpleEnterpriseFramework.Builders.UIBuilder;
+using SimpleEnterpriseFramework.DBSetting.Membership.CORs;
+using SimpleEnterpriseFramework.DBSetting.Membership.CORs.Executor;
 
 namespace SimpleEnterpriseFramework
 {
@@ -15,9 +17,12 @@ namespace SimpleEnterpriseFramework
         private TextBox usernameTextBox, passwordTextBox;
         private Button loginButton, registerButton;
 
+
         public LoginForm(string name) : base(name, "Login Form", new Size(width: 800, height: 480))
         {
+            
             InitializeComponent();
+
             BaseFormBuilder builder = new BaseFormBuilder();
             builder.SetTitle("Login");
 
@@ -126,7 +131,7 @@ namespace SimpleEnterpriseFramework
 
         private void textUserName_Enter(object sender, EventArgs e)
         {
-            if (usernameTextBox.Text == "Account" || usernameTextBox.Text == "Empty Field")
+            if (usernameTextBox.Text == "Account" || usernameTextBox.Text == "Empty field")
             {
                 usernameTextBox.Text = "";
                 usernameTextBox.ForeColor = System.Drawing.Color.Black;
@@ -145,7 +150,7 @@ namespace SimpleEnterpriseFramework
         private void textPassword_Enter(object sender, EventArgs e)
         {
             passwordTextBox.UseSystemPasswordChar = true;
-            if (passwordTextBox.Text == "Password" || passwordTextBox.Text == "Empty Field")
+            if (passwordTextBox.Text == "Password" || passwordTextBox.Text == "Empty field")
             {
                 passwordTextBox.Text = "";
                 passwordTextBox.ForeColor = System.Drawing.Color.Black;
@@ -164,17 +169,22 @@ namespace SimpleEnterpriseFramework
 
         private void login_Click(object sender, EventArgs e)
         {
-            if (usernameTextBox.Text == "Account")
-            {
-                usernameTextBox.Text = "Empty Field";
-                usernameTextBox.ForeColor = System.Drawing.Color.Red;
-            }
-            if (passwordTextBox.Text == "Password")
-            {
-                passwordTextBox.Text = "Empty Field";
-                passwordTextBox.ForeColor = System.Drawing.Color.Red;
-            }
-            if (usernameTextBox.Text != "Account" && passwordTextBox.Text != "Password" && usernameTextBox.Text != "" && passwordTextBox.Text != "" && usernameTextBox.Text != "Empty Field" && passwordTextBox.Text != "Empty Field")
+            IMembershipExecutor _executor = new EmptyFieldExecutor(new ValidateMemberExecutor(null));
+
+            _executor.Execute(
+                new List<string>
+                {
+                    usernameTextBox.Text, passwordTextBox.Text,
+                },
+                new List<TextBox>
+                {
+                    usernameTextBox, passwordTextBox
+                }
+            );
+            //Old code below (commented)
+
+            /*
+            if (usernameTextBox.Text != "Account" && passwordTextBox.Text != "Password" && usernameTextBox.Text != "" && passwordTextBox.Text != "" && usernameTextBox.Text != "Empty field" && passwordTextBox.Text != "Empty field")
             {
                 // Kết nối với MySQL bằng tk và mk đã setup trên MySQL
                 using (var connectionHelper = new SQLServer("Data Source=KIMTRINH\\SQLEXPRESS;Database=simple_enterprise_framework;Integrated Security=True;"))
@@ -221,7 +231,7 @@ namespace SimpleEnterpriseFramework
                         }
                     }
                 }
-            }
+            } */
         }
 
         private void register_Click(object sender, EventArgs e)

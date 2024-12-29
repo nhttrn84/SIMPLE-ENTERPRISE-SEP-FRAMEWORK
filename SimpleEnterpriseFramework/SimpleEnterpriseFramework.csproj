@@ -116,8 +116,17 @@
     <Compile Include="Builders\UIBuilder\IButton.cs" />
     <Compile Include="Builders\UIBuilder\IBasicTextBox.cs" />
     <Compile Include="Builders\UISet\PanelSet.cs" />
+    <Compile Include="DBSetting\DAO\AbstractDAO.cs" />
+    <Compile Include="DBSetting\DAO\AbstractProcessData.cs" />
+    <Compile Include="DBSetting\DAO\SQLServerDAO.cs" />
+    <Compile Include="DBSetting\DAO\SQLServerProcess.cs" />
     <Compile Include="DBSetting\Database.cs" />
+    <Compile Include="DBSetting\Membership\CORs\Executor\EmptyFieldExecutor.cs" />
+    <Compile Include="DBSetting\Membership\CORs\Executor\IMembershipExecutor.cs" />
+    <Compile Include="DBSetting\Membership\CORs\Executor\PasswordMatchExecutor.cs" />
+    <Compile Include="DBSetting\Membership\CORs\Executor\ValidateMemberExecutor.cs" />
     <Compile Include="DBSetting\Membership\HashPassword.cs" />
+    <Compile Include="DBSetting\Membership\Membership.cs" />
     <Compile Include="DBSetting\SQLServer\SQLServer.cs" />
     <Compile Include="DI\IoCContainer.cs" />
     <Compile Include="Interfaces\Authenticate\IAuthenticate.cs" />

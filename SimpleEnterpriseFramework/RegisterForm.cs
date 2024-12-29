@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SimpleEnterpriseFramework.Builders.UIBuilder;
+using SimpleEnterpriseFramework.DBSetting.Membership.CORs.Executor;
+using SimpleEnterpriseFramework.DBSetting.Membership.CORs;
 using SimpleEnterpriseFramework.DBSetting.Membership.HashPassword;
 using SimpleEnterpriseFramework.DBSetting.SQLServer;
 using SimpleEnterpriseFramework.Interfaces.Authenticate;
@@ -214,13 +216,28 @@ namespace SimpleEnterpriseFramework
 
         private void register_Click(object sender, EventArgs e)
         {
-            bool pass = true;
+            IMembershipExecutor _executor = new EmptyFieldExecutor(
+                new PasswordMatchExecutor(new ValidateMemberExecutor(null)));
 
+            _executor.Execute(
+                new List<string>
+                {
+                    usernameTextBoxReg.Text, passwordTextBoxReg.Text, confirmPasswordTextBoxReg.Text
+                },
+                new List<TextBox>
+                {
+                    usernameTextBoxReg, passwordTextBoxReg, confirmPasswordTextBoxReg
+                }
+                );
+
+            //Old code below (in comment)
+
+            /*
+            bool pass = true;
             if (usernameTextBoxReg.Text == "Account" || usernameTextBoxReg.Text == "")
             {
                 usernameTextBoxReg.Text = "Empty field";
                 usernameTextBoxReg.ForeColor = System.Drawing.Color.Red;
-                pass = false;
             }
             if (passwordTextBoxReg.Text == "Password" || passwordTextBoxReg.Text == "")
             {
@@ -311,7 +328,7 @@ namespace SimpleEnterpriseFramework
                         }
                     }
                 }
-            }
+            } */
         }
 
     }
