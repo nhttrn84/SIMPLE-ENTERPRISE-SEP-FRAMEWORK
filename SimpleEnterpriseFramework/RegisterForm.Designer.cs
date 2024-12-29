@@ -162,7 +162,7 @@
             this.txtRePassword.TabIndex = 17;
             this.txtRePassword.TabStop = false;
             this.txtRePassword.Text = "RePassword";
-            this.txtRePassword.Enter += new System.EventHandler(this.textRePassword_Enter);
+        //    this.txtRePassword.Enter += new System.EventHandler(this.textRPassword_Enter);
             this.txtRePassword.Leave += new System.EventHandler(this.textRePassword_Leave);
             // 
             // label9
@@ -186,7 +186,7 @@
             this.linkLabel1.TabIndex = 15;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Do you have an account yet?";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+          //  this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // pictureBox2
             // 

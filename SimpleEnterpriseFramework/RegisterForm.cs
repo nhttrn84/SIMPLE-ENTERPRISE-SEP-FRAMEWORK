@@ -8,21 +8,117 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SimpleEnterpriseFramework.Builders.UIBuilder;
 using SimpleEnterpriseFramework.DBSetting.Membership.HashPassword;
 using SimpleEnterpriseFramework.DBSetting.SQLServer;
 using SimpleEnterpriseFramework.Interfaces.Authenticate;
 
 namespace SimpleEnterpriseFramework
 {
-    public partial class RegisterForm : Form, IAuthenticateForm
+    public partial class RegisterForm : BaseForm
     {
-        public RegisterForm()
+        private TextBox usernameTextBoxReg, passwordTextBoxReg, confirmPasswordTextBoxReg;
+        private Button loginButtonReg, registerButtonReg;
+        public RegisterForm(string name) : base(name, "Register Form", new Size(width: 800, height: 480))
         {
             InitializeComponent();
+            BaseFormBuilder builder = new BaseFormBuilder();
+            builder.SetTitle("Register");
+
+            loginButtonReg = new ButtonBuilder()
+                .Name("btnLogin")
+                .Text("Login")
+                .BackgroundColor(Color.Black)
+                .ContentColor(Color.White)
+                .Size(new Size(140, 45))
+                .ClickHandler((sender, e) => login_Click(sender, e))
+                .Build();
+
+            registerButtonReg = new ButtonBuilder()
+                .Name("btnRegister")
+                .Text("Register")
+                .BackgroundColor(Color.Black)
+                .ContentColor(Color.White)
+                .Size(new Size(140, 45))
+                .ClickHandler((sender, e) => register_Click(sender, e))
+                .Build();
+
+            usernameTextBoxReg = new BasicTextBoxBuilder()
+                .Name("usernameTextBox")
+                .Text("")
+                .TabIndex(9)
+                .TabStop(true)
+                .ContentColor(SystemColors.InfoText)
+                .BorderStyle(BorderStyle.FixedSingle)
+                .Size(new Size(306, 20))
+                .EnterEventHandler((sender, e) => { textUserName_Enter(sender, e); })
+                .LeaveEventHandler((sender, e) => { textUserName_Leave(sender, e); })
+                .Build();
+
+            passwordTextBoxReg = new BasicTextBoxBuilder()
+                .Name("passwordTextBox")
+                .Text("Password")
+                .TabIndex(12)
+                .TabStop(false)
+                .IsPasswordField(true)
+                .ContentColor(SystemColors.ScrollBar)
+                .BorderStyle(BorderStyle.FixedSingle)
+                .Size(new Size(306, 20))
+                .EnterEventHandler((sender, e) => { textPassword_Enter(sender, e); })
+                .LeaveEventHandler((sender, e) => { textPassword_Leave(sender, e); })
+                .Build();
+
+            confirmPasswordTextBoxReg = new BasicTextBoxBuilder()
+                .Name("confirmPasswordTextBox")
+                .Text("RePassword")
+                .TabIndex(12)
+                .TabStop(false)
+                .IsPasswordField(true)
+                .ContentColor(SystemColors.ScrollBar)
+                .BorderStyle(BorderStyle.FixedSingle)
+                .Size(new Size(306, 20))
+                .EnterEventHandler((sender, e) => { textRePassword_Enter(sender, e); })
+                .LeaveEventHandler((sender, e) => { textRePassword_Leave(sender, e); })
+                .Build();
+
+            builder.AddFormText(usernameTextBoxReg, "Username");
+            builder.AddFormText(passwordTextBoxReg, "Password");
+            builder.AddFormText(confirmPasswordTextBoxReg, "Confirm Password");
+            builder.AddButton(registerButtonReg);
+            builder.AddButton(loginButtonReg);
+           
+
+            // Create a container panel to center the form
+            Panel container = new Panel
+            {
+                Dock = DockStyle.None,
+                Size = new Size(370, 350),
+                BackColor = Color.LightGray
+            };
+
+            // Center the container within the form
+            container.Location = new Point((this.ClientSize.Width - container.Width) / 2,
+                                           (this.ClientSize.Height - container.Height) / 2);
+
+            container.Anchor = AnchorStyles.None;
+
+            // Add the built form to the container
+            container.Controls.Add(builder.Build());
+
+            //Unhide password
+            passwordTextBoxReg.UseSystemPasswordChar = false;
+            confirmPasswordTextBoxReg.UseSystemPasswordChar = false;
+
+            SuspendLayout();
+            this.Controls.Clear();
+            this.Controls.Add(container);
+            ResumeLayout(false);
         }
 
-        public event EventHandler SubmitClicked;
-        public event EventHandler SwitchClicked;
+        public RegisterForm() : this("Register")
+        {
+        }
+
 
 
         private void RegisterForm_Load(object sender, EventArgs e)
@@ -47,76 +143,69 @@ namespace SimpleEnterpriseFramework
             MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
  
         }
-        // Gọi sự kiện đăng nhập khi người dùng nhấn nút đăng nhập
-        private void OnRegisterClicked()
-        {
-            SubmitClicked?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void OnLoginClicked()
-        {
-            SwitchClicked?.Invoke(this, EventArgs.Empty);
-        }
-
         public void SetTables(List<string> tables)
         {
  
         }
         private void textUserName_Enter(object sender, EventArgs e)
         {
-            if (txtUserNameRegister.Text == "Account" || txtUserNameRegister.Text == "! Chưa có dữ liệu")
+            if (usernameTextBoxReg.Text == "Account" || usernameTextBoxReg.Text == "Empty field")
             {
-                txtUserNameRegister.Text = "";
-                txtUserNameRegister.ForeColor = System.Drawing.Color.Black;
+                usernameTextBoxReg.Text = "";
+                usernameTextBoxReg.ForeColor = System.Drawing.Color.Black;
             }
         }
 
         private void textUserName_Leave(object sender, EventArgs e)
         {
-            if (txtUserNameRegister.Text == "")
+            if (usernameTextBoxReg.Text == "")
             {
-                txtUserNameRegister.Text = "Account";
-                txtUserNameRegister.ForeColor = System.Drawing.SystemColors.ScrollBar;
+                usernameTextBoxReg.Text = "Account";
+                usernameTextBoxReg.ForeColor = System.Drawing.SystemColors.ScrollBar;
             }
         }
 
         private void textPassword_Enter(object sender, EventArgs e)
         {
-            if (txtPasswordRegister.Text == "Password" || txtPasswordRegister.Text == "! Chưa có dữ liệu")
+            passwordTextBoxReg.UseSystemPasswordChar = true;
+            if (passwordTextBoxReg.Text == "Password" || passwordTextBoxReg.Text == "Empty field")
             {
-                txtPasswordRegister.Text = "";
-                txtPasswordRegister.ForeColor = System.Drawing.Color.Black;
+                passwordTextBoxReg.Text = "";
+                passwordTextBoxReg.ForeColor = System.Drawing.Color.Black;
             }
         }
 
         private void textPassword_Leave(object sender, EventArgs e)
         {
-            if (txtPasswordRegister.Text == "")
+            if (passwordTextBoxReg.Text == "")
             {
-                txtPasswordRegister.Text = "Password";
-                txtPasswordRegister.ForeColor = System.Drawing.SystemColors.ScrollBar;
+                passwordTextBoxReg.Text = "Password";
+                passwordTextBoxReg.UseSystemPasswordChar = false;
+                passwordTextBoxReg.ForeColor = System.Drawing.SystemColors.ScrollBar;
             }
         }
 
         private void textRePassword_Enter(object sender, EventArgs e)
         {
-            if (txtRePassword.Text == "RePassword" || txtRePassword.Text == "! Chưa có dữ liệu" || txtRePassword.Text == "! RePassword incorrect")
+            confirmPasswordTextBoxReg.UseSystemPasswordChar = true;
+            if (confirmPasswordTextBoxReg.Text == "RePassword" || confirmPasswordTextBoxReg.Text == "Empty field" || confirmPasswordTextBoxReg.Text == "Password mismatch")
             {
-                txtRePassword.Text = "";
-                txtRePassword.ForeColor = System.Drawing.Color.Black;
+                confirmPasswordTextBoxReg.Text = "";
+                confirmPasswordTextBoxReg.ForeColor = System.Drawing.Color.Black;
             }
         }
 
         private void textRePassword_Leave(object sender, EventArgs e)
         {
-            if (txtRePassword.Text == "")
+            if (confirmPasswordTextBoxReg.Text == "")
             {
-                txtRePassword.Text = "RePassword";
-                txtRePassword.ForeColor = System.Drawing.SystemColors.ScrollBar;
+                confirmPasswordTextBoxReg.Text = "RePassword";
+                confirmPasswordTextBoxReg.UseSystemPasswordChar = false;
+                confirmPasswordTextBoxReg.ForeColor = System.Drawing.SystemColors.ScrollBar;
             }
         }
-
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        
+        private void login_Click(object sender, EventArgs e)
         {
             HideForm();
             LoginForm login = new LoginForm();
@@ -125,89 +214,100 @@ namespace SimpleEnterpriseFramework
 
         private void register_Click(object sender, EventArgs e)
         {
-            if (txtUserNameRegister.Text == "Account" || txtUserNameRegister.Text == "")
+            bool pass = true;
+
+            if (usernameTextBoxReg.Text == "Account" || usernameTextBoxReg.Text == "")
             {
-                txtUserNameRegister.Text = "! Chưa có dữ liệu";
-                txtUserNameRegister.ForeColor = System.Drawing.Color.Red;
+                usernameTextBoxReg.Text = "Empty field";
+                usernameTextBoxReg.ForeColor = System.Drawing.Color.Red;
+                pass = false;
             }
-            if (txtPasswordRegister.Text == "Password" || txtPasswordRegister.Text == "")
+            if (passwordTextBoxReg.Text == "Password" || passwordTextBoxReg.Text == "")
             {
-                txtPasswordRegister.Text = "! Chưa có dữ liệu";
-                txtPasswordRegister.ForeColor = System.Drawing.Color.Red;
+                passwordTextBoxReg.Text = "Empty field";
+                passwordTextBoxReg.ForeColor = System.Drawing.Color.Red;
+                pass = false;
             }
-            if (txtRePassword.Text == "RePassword")
+            if (confirmPasswordTextBoxReg.Text == "RePassword" || confirmPasswordTextBoxReg.Text == "")
             {
-                txtRePassword.Text = "! Chưa có dữ liệu";
-                txtRePassword.ForeColor = System.Drawing.Color.Red;
+                confirmPasswordTextBoxReg.Text = "Empty field";
+                confirmPasswordTextBoxReg.ForeColor = System.Drawing.Color.Red;
+                pass = false;
             }
-            if (txtPasswordRegister.Text != "Password" && txtRePassword.Text != "RePassword")
+            if (!pass) return;
+
+            
+            if (passwordTextBoxReg.Text == "Empty field" || confirmPasswordTextBoxReg.Text == "Empty field")
             {
-                if (txtPasswordRegister.Text != txtRePassword.Text && txtRePassword.Text != "! RePassword incorrect" && txtRePassword.Text != "! Chưa có dữ liệu")
+                pass = false;
+            }
+            if (passwordTextBoxReg.Text != confirmPasswordTextBoxReg.Text && confirmPasswordTextBoxReg.Text != "Empty field")
+            {
+                confirmPasswordTextBoxReg.Text = "Password mismatch";
+                confirmPasswordTextBoxReg.UseSystemPasswordChar = false;
+                confirmPasswordTextBoxReg.ForeColor = System.Drawing.Color.Red;
+                pass = false;
+            }
+            if (pass)
+            {
+                using (var connectionHelper = new SQLServer("Data Source=KIMTRINH\\SQLEXPRESS;Database=simple_enterprise_framework;Integrated Security=True;"))
                 {
-                    txtRePassword.Text = "! RePassword incorrect";
-                    txtRePassword.ForeColor = System.Drawing.Color.Red;
-                }
-                else
-                {
-                    using (var connectionHelper = new SQLServer("Data Source=KIMTRINH\\SQLEXPRESS;Database=simple_enterprise_framework;Integrated Security=True;"))
+                    Console.WriteLine("Connect successful");
+                    if (connectionHelper.OpenConnection())
                     {
-                        Console.WriteLine("Connect successful");
-                        if (connectionHelper.OpenConnection())
+                        string account = usernameTextBoxReg.Text.Trim();
+                        string password = passwordTextBoxReg.Text.Trim();
+
+
+                        try
                         {
-                            string account = txtUserNameRegister.Text.Trim();
-                            string password = txtPasswordRegister.Text.Trim();
-
-
-                            try
+                            using (var command = connectionHelper.GetConnection().CreateCommand())
                             {
-                                using (var command = connectionHelper.GetConnection().CreateCommand())
+                                // Kiểm tra xem tên người dùng đã tồn tại chưa
+                                string checkUserQuery = "SELECT COUNT(*) FROM member WHERE username = @Username";
+                                command.CommandText = checkUserQuery;
+                                command.Parameters.AddWithValue("@Username", account);
+
+                                int existingUserCount = Convert.ToInt32(command.ExecuteScalar());
+
+                                if (existingUserCount > 0)
                                 {
-                                    // Kiểm tra xem tên người dùng đã tồn tại chưa
-                                    string checkUserQuery = "SELECT COUNT(*) FROM member WHERE username = @Username";
-                                    command.CommandText = checkUserQuery;
+                                    MessageBox.Show("Tài khoản đã tồn tại. Vui lòng chọn một tên người dùng khác.");
+                                }
+                                else
+                                {
+                                    // Thêm tài khoản mới vào cơ sở dữ liệu
+                                    string insertUserQuery = "INSERT INTO member (username, password) VALUES (@Username, @Password)";
+                                    command.CommandText = insertUserQuery;
+                                    command.Parameters.Clear(); // Xóa các tham số cũ
+
+                                    // Băm mật khẩu trước khi lưu vào cơ sở dữ liệu
+                                    string hashedPassword = HashPassword.hashPassword(password);
+
                                     command.Parameters.AddWithValue("@Username", account);
+                                    command.Parameters.AddWithValue("@Password", hashedPassword);
 
-                                    int existingUserCount = Convert.ToInt32(command.ExecuteScalar());
+                                    int rowsAffected = command.ExecuteNonQuery();
 
-                                    if (existingUserCount > 0)
+                                    if (rowsAffected > 0)
                                     {
-                                        MessageBox.Show("Tài khoản đã tồn tại. Vui lòng chọn một tên người dùng khác.");
+                                        MessageBox.Show("Đăng ký thành công");
                                     }
                                     else
                                     {
-                                        // Thêm tài khoản mới vào cơ sở dữ liệu
-                                        string insertUserQuery = "INSERT INTO member (username, password) VALUES (@Username, @Password)";
-                                        command.CommandText = insertUserQuery;
-                                        command.Parameters.Clear(); // Xóa các tham số cũ
-
-                                        // Băm mật khẩu trước khi lưu vào cơ sở dữ liệu
-                                        string hashedPassword = HashPassword.hashPassword(password);
-
-                                        command.Parameters.AddWithValue("@Username", account);
-                                        command.Parameters.AddWithValue("@Password", hashedPassword);
-
-                                        int rowsAffected = command.ExecuteNonQuery();
-
-                                        if (rowsAffected > 0)
-                                        {
-                                            MessageBox.Show("Đăng ký thành công");
-                                        }
-                                        else
-                                        {
-                                            MessageBox.Show("Đăng ký thất bại");
-                                        }
+                                        MessageBox.Show("Đăng ký thất bại");
                                     }
                                 }
                             }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}");
-                            }
-                            finally
-                            {
-                                // Đóng kết nối sau khi thực hiện xong
-                                connectionHelper.CloseConnection();
-                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}");
+                        }
+                        finally
+                        {
+                            // Đóng kết nối sau khi thực hiện xong
+                            connectionHelper.CloseConnection();
                         }
                     }
                 }

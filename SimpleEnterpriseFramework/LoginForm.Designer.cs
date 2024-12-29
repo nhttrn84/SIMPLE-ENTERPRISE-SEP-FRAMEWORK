@@ -82,7 +82,6 @@ namespace SimpleEnterpriseFramework
             this.linkLabel1.TabIndex = 15;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Do you have an account yet?";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // btnLogin
             // 
@@ -138,7 +137,7 @@ namespace SimpleEnterpriseFramework
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(47, 127);
+            this.pictureBox1.Location = new System.Drawing.Point(53, 126);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(40, 36);

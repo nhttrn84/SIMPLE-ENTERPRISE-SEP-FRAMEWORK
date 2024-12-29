@@ -13,9 +13,7 @@ namespace SimpleEnterpriseFramework
     public partial class LoginForm : BaseForm
     {
         private TextBox usernameTextBox, passwordTextBox;
-        private Button loginButton;
-        public event EventHandler SubmitClicked;
-        public event EventHandler SwitchClicked;
+        private Button loginButton, registerButton;
 
         public LoginForm(string name) : base(name, "Login Form", new Size(width: 800, height: 480))
         {
@@ -28,8 +26,17 @@ namespace SimpleEnterpriseFramework
                 .Text("Login")
                 .BackgroundColor(Color.Black)
                 .ContentColor(Color.White)
-                .Size(new Size(300, 45))
+                .Size(new Size(140, 45))
                 .ClickHandler((sender, e) => login_Click(sender, e))
+                .Build();
+
+            registerButton = new ButtonBuilder()
+                .Name("btnRegister")
+                .Text("Register")
+                .BackgroundColor(Color.Black)
+                .ContentColor(Color.White)
+                .Size(new Size(140, 45))
+                .ClickHandler((sender, e) => register_Click(sender, e))
                 .Build();
 
             usernameTextBox = new BasicTextBoxBuilder()
@@ -60,6 +67,7 @@ namespace SimpleEnterpriseFramework
             builder.AddFormText(usernameTextBox, "Username");
             builder.AddFormText(passwordTextBox, "Password");
             builder.AddButton(loginButton);
+            builder.AddButton(registerButton);
 
             // Create a container panel to center the form
             Panel container = new Panel
@@ -77,6 +85,10 @@ namespace SimpleEnterpriseFramework
 
             // Add the built form to the container
             container.Controls.Add(builder.Build());
+
+
+            //Unhide password
+            passwordTextBox.UseSystemPasswordChar = false;
 
             SuspendLayout();
             this.Controls.Clear();
@@ -107,16 +119,6 @@ namespace SimpleEnterpriseFramework
  
         }
         // Gọi sự kiện đăng nhập khi người dùng nhấn nút đăng nhập
-        private void OnLoginClicked()
-        {
-            SubmitClicked?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void OnRegisterClicked()
-        {
-            SwitchClicked?.Invoke(this, EventArgs.Empty);
-        }
-
         public void SetTables(List<string> tables)
         {
  
@@ -124,7 +126,7 @@ namespace SimpleEnterpriseFramework
 
         private void textUserName_Enter(object sender, EventArgs e)
         {
-            if (usernameTextBox.Text == "Account" || usernameTextBox.Text == "! Chưa có dữ liệu")
+            if (usernameTextBox.Text == "Account" || usernameTextBox.Text == "Empty Field")
             {
                 usernameTextBox.Text = "";
                 usernameTextBox.ForeColor = System.Drawing.Color.Black;
@@ -142,7 +144,8 @@ namespace SimpleEnterpriseFramework
 
         private void textPassword_Enter(object sender, EventArgs e)
         {
-            if (passwordTextBox.Text == "Password" || passwordTextBox.Text == "! Chưa có dữ liệu")
+            passwordTextBox.UseSystemPasswordChar = true;
+            if (passwordTextBox.Text == "Password" || passwordTextBox.Text == "Empty Field")
             {
                 passwordTextBox.Text = "";
                 passwordTextBox.ForeColor = System.Drawing.Color.Black;
@@ -154,6 +157,7 @@ namespace SimpleEnterpriseFramework
             if (passwordTextBox.Text == "")
             {
                 passwordTextBox.Text = "Password";
+                passwordTextBox.UseSystemPasswordChar = false;
                 passwordTextBox.ForeColor = System.Drawing.SystemColors.ScrollBar;
             }
         }
@@ -162,15 +166,15 @@ namespace SimpleEnterpriseFramework
         {
             if (usernameTextBox.Text == "Account")
             {
-                usernameTextBox.Text = "! Chưa có dữ liệu";
+                usernameTextBox.Text = "Empty Field";
                 usernameTextBox.ForeColor = System.Drawing.Color.Red;
             }
             if (passwordTextBox.Text == "Password")
             {
-                passwordTextBox.Text = "! Chưa có dữ liệu";
+                passwordTextBox.Text = "Empty Field";
                 passwordTextBox.ForeColor = System.Drawing.Color.Red;
             }
-            if (usernameTextBox.Text != "Account" && passwordTextBox.Text != "Password" && usernameTextBox.Text != "" && passwordTextBox.Text != "" && usernameTextBox.Text != "! Chưa có dữ liệu" && passwordTextBox.Text != "! Chưa có dữ liệu")
+            if (usernameTextBox.Text != "Account" && passwordTextBox.Text != "Password" && usernameTextBox.Text != "" && passwordTextBox.Text != "" && usernameTextBox.Text != "Empty Field" && passwordTextBox.Text != "Empty Field")
             {
                 // Kết nối với MySQL bằng tk và mk đã setup trên MySQL
                 using (var connectionHelper = new SQLServer("Data Source=KIMTRINH\\SQLEXPRESS;Database=simple_enterprise_framework;Integrated Security=True;"))
@@ -220,7 +224,7 @@ namespace SimpleEnterpriseFramework
             }
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void register_Click(object sender, EventArgs e)
         {
             HideForm();
             RegisterForm register = new RegisterForm();
