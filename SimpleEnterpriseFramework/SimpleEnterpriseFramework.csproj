@@ -121,6 +121,7 @@
     <Compile Include="DBSetting\DAO\SQLServerDAO.cs" />
     <Compile Include="DBSetting\DAO\SQLServerProcess.cs" />
     <Compile Include="DBSetting\Database.cs" />
+    <Compile Include="DBSetting\DatabaseInfo.cs" />
     <Compile Include="DBSetting\Membership\CORs\Executor\EmptyFieldExecutor.cs" />
     <Compile Include="DBSetting\Membership\CORs\Executor\IMembershipExecutor.cs" />
     <Compile Include="DBSetting\Membership\CORs\Executor\PasswordMatchExecutor.cs" />

@@ -217,7 +217,7 @@ namespace SimpleEnterpriseFramework
         private void register_Click(object sender, EventArgs e)
         {
             IMembershipExecutor _executor = new EmptyFieldExecutor(
-                new PasswordMatchExecutor(new ValidateMemberExecutor(null)));
+                new PasswordMatchExecutor(new ValidateMemberExecutor(null, this)));
 
             _executor.Execute(
                 new List<string>

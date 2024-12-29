@@ -169,7 +169,7 @@ namespace SimpleEnterpriseFramework
 
         private void login_Click(object sender, EventArgs e)
         {
-            IMembershipExecutor _executor = new EmptyFieldExecutor(new ValidateMemberExecutor(null));
+            IMembershipExecutor _executor = new EmptyFieldExecutor(new ValidateMemberExecutor(null, this));
 
             _executor.Execute(
                 new List<string>
