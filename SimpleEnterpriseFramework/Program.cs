@@ -16,10 +16,11 @@ namespace SimpleEnterpriseFramework
         static void Main()
         {
             Database databases = new Database();
-            List<string> list = databases.GetDatabaseNames(); // Lấy cái CSDL từ máy lên
-            SelectDB sldb = new SelectDB(list); // Render list CSDL lên comboBox
+            //List<string> list = databases.GetDatabaseNames(); // Lấy cái CSDL từ máy lên
+            //SelectDB sldb = new SelectDB(list); // Render list CSDL lên comboBox
+            LoginForm loginForm = new LoginForm();
             Application.EnableVisualStyles();
-            Application.Run(sldb);
+            Application.Run(loginForm);
         }
     }
 }

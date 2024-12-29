@@ -101,12 +101,39 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Builders\UIBuilder\BaseFormBuilder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Builders\UIBuilder\BasicTextBoxBuilder.cs" />
+    <Compile Include="Builders\UIBuilder\ButtonBuilder.cs" />
+    <Compile Include="Builders\UIBuilder\IFormBuilder.cs" />
+    <Compile Include="Builders\UISet\FormTextField.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Builders\UIBuilder\IButton.cs" />
+    <Compile Include="Builders\UIBuilder\IBasicTextBox.cs" />
+    <Compile Include="Builders\UISet\PanelSet.cs" />
+    <Compile Include="DBSetting\DAO\AbstractDAO.cs" />
+    <Compile Include="DBSetting\DAO\AbstractProcessData.cs" />
+    <Compile Include="DBSetting\DAO\SQLServerDAO.cs" />
+    <Compile Include="DBSetting\DAO\SQLServerProcess.cs" />
     <Compile Include="DBSetting\Database.cs" />
+    <Compile Include="DBSetting\DatabaseInfo.cs" />
+    <Compile Include="DBSetting\Membership\CORs\Executor\EmptyFieldExecutor.cs" />
+    <Compile Include="DBSetting\Membership\CORs\Executor\IMembershipExecutor.cs" />
+    <Compile Include="DBSetting\Membership\CORs\Executor\PasswordMatchExecutor.cs" />
+    <Compile Include="DBSetting\Membership\CORs\Executor\ValidateMemberExecutor.cs" />
     <Compile Include="DBSetting\Membership\HashPassword.cs" />
-    <Compile Include="DBSetting\SingletonDatabase.cs" />
+    <Compile Include="DBSetting\Membership\Membership.cs" />
     <Compile Include="DBSetting\SQLServer\SQLServer.cs" />
-    <Compile Include="DBSetting\SQLServer\SQLServerDAO.cs" />
-    <Compile Include="DBSetting\SQLServer\SQLServerProcessor.cs" />
+    <Compile Include="DI\IoCContainer.cs" />
+    <Compile Include="Interfaces\Authenticate\IAuthenticate.cs" />
+    <Compile Include="LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="RegisterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,9 +143,6 @@
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LoginForm.Designer.cs">
-      <DependentUpon>LoginForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,12 +151,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SelectDB.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SelectDB.Designer.cs">
-      <DependentUpon>SelectDB.cs</DependentUpon>
-    </Compile>
+    <EmbeddedResource Include="Builders\UIBuilder\BaseFormBuilder.resx">
+      <DependentUpon>BaseFormBuilder.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -151,9 +172,6 @@
     </Compile>
     <EmbeddedResource Include="RegisterForm.resx">
       <DependentUpon>RegisterForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SelectDB.resx">
-      <DependentUpon>SelectDB.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -1,85 +1,198 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
+
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-using SimpleEnterpriseFramework.DBSetting.Membership;
-using SimpleEnterpriseFramework.DBSetting;
 using SimpleEnterpriseFramework.DBSetting.SQLServer;
 using SimpleEnterpriseFramework.DBSetting.Membership.HashPassword;
+using SimpleEnterpriseFramework.Builders.UIBuilder;
+using SimpleEnterpriseFramework.DBSetting.Membership.CORs;
+using SimpleEnterpriseFramework.DBSetting.Membership.CORs.Executor;
 
 namespace SimpleEnterpriseFramework
 {
-    public partial class LoginForm : Form
+    public partial class LoginForm : BaseForm
     {
-        public LoginForm()
+        private TextBox usernameTextBox, passwordTextBox;
+        private Button loginButton, registerButton;
+
+
+        public LoginForm(string name) : base(name, "Login Form", new Size(width: 800, height: 480))
         {
+            
             InitializeComponent();
+
+            BaseFormBuilder builder = new BaseFormBuilder();
+            builder.SetTitle("Login");
+
+            loginButton = new ButtonBuilder()
+                .Name("btnLogin")
+                .Text("Login")
+                .BackgroundColor(Color.Black)
+                .ContentColor(Color.White)
+                .Size(new Size(140, 45))
+                .ClickHandler((sender, e) => login_Click(sender, e))
+                .Build();
+
+            registerButton = new ButtonBuilder()
+                .Name("btnRegister")
+                .Text("Register")
+                .BackgroundColor(Color.Black)
+                .ContentColor(Color.White)
+                .Size(new Size(140, 45))
+                .ClickHandler((sender, e) => register_Click(sender, e))
+                .Build();
+
+            usernameTextBox = new BasicTextBoxBuilder()
+                .Name("usernameTextBox")
+                .Text("")
+                .TabIndex(9)
+                .TabStop(true)
+                .ContentColor(SystemColors.InfoText)
+                .BorderStyle(BorderStyle.FixedSingle)
+                .Size(new Size(306, 20))
+                .EnterEventHandler((sender, e) => { textUserName_Enter(sender, e); })
+                .LeaveEventHandler((sender, e) => { textUserName_Leave(sender, e); })
+                .Build();
+
+            passwordTextBox = new BasicTextBoxBuilder()
+                .Name("passwordTextBox")
+                .Text("Password")
+                .TabIndex(12)
+                .TabStop(false)
+                .IsPasswordField(true)
+                .ContentColor(SystemColors.ScrollBar)
+                .BorderStyle(BorderStyle.FixedSingle)
+                .Size(new Size(306, 20))
+                .EnterEventHandler((sender, e) => { textPassword_Enter(sender, e); })
+                .LeaveEventHandler((sender, e) => { textPassword_Leave(sender, e); })
+                .Build();
+
+            builder.AddFormText(usernameTextBox, "Username");
+            builder.AddFormText(passwordTextBox, "Password");
+            builder.AddButton(loginButton);
+            builder.AddButton(registerButton);
+
+            // Create a container panel to center the form
+            Panel container = new Panel
+            {
+                Dock = DockStyle.None,
+                Size = new Size(370, 285),
+                BackColor = Color.LightGray
+            };
+
+            // Center the container within the form
+            container.Location = new Point((this.ClientSize.Width - container.Width) / 2,
+                                           (this.ClientSize.Height - container.Height) / 2);
+
+            container.Anchor = AnchorStyles.None;
+
+            // Add the built form to the container
+            container.Controls.Add(builder.Build());
+
+
+            //Unhide password
+            passwordTextBox.UseSystemPasswordChar = false;
+
+            SuspendLayout();
+            this.Controls.Clear();
+            this.Controls.Add(container);
+            ResumeLayout(false);
+        }
+
+        public LoginForm() : this("Login")
+        {
+        }
+
+
+
+       
+        public void ShowForm()
+        {
+            this.Show();
+        }
+
+        public void HideForm()
+        {
+            this.Hide();
+        }
+
+        public void ShowError(string errorMessage)
+        {
+            MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+ 
+        }
+        // Gọi sự kiện đăng nhập khi người dùng nhấn nút đăng nhập
+        public void SetTables(List<string> tables)
+        {
+ 
         }
 
         private void textUserName_Enter(object sender, EventArgs e)
         {
-            if (txtUsernameLogin.Text == "Account" || txtUsernameLogin.Text == "! Chưa có dữ liệu")
+            if (usernameTextBox.Text == "Account" || usernameTextBox.Text == "Empty field")
             {
-                txtUsernameLogin.Text = "";
-                txtUsernameLogin.ForeColor = System.Drawing.Color.Black;
+                usernameTextBox.Text = "";
+                usernameTextBox.ForeColor = System.Drawing.Color.Black;
             }
         }
 
         private void textUserName_Leave(object sender, EventArgs e)
         {
-            if (txtUsernameLogin.Text == "")
+            if (usernameTextBox.Text == "")
             {
-                txtUsernameLogin.Text = "Account";
-                txtUsernameLogin.ForeColor = System.Drawing.SystemColors.ScrollBar;
+                usernameTextBox.Text = "Account";
+                usernameTextBox.ForeColor = System.Drawing.SystemColors.ScrollBar;
             }
         }
 
         private void textPassword_Enter(object sender, EventArgs e)
         {
-            if (txtPasswordLogin.Text == "Password" || txtPasswordLogin.Text == "! Chưa có dữ liệu")
+            passwordTextBox.UseSystemPasswordChar = true;
+            if (passwordTextBox.Text == "Password" || passwordTextBox.Text == "Empty field")
             {
-                txtPasswordLogin.Text = "";
-                txtPasswordLogin.ForeColor = System.Drawing.Color.Black;
+                passwordTextBox.Text = "";
+                passwordTextBox.ForeColor = System.Drawing.Color.Black;
             }
         }
 
         private void textPassword_Leave(object sender, EventArgs e)
         {
-            if (txtPasswordLogin.Text == "")
+            if (passwordTextBox.Text == "")
             {
-                txtPasswordLogin.Text = "Password";
-                txtPasswordLogin.ForeColor = System.Drawing.SystemColors.ScrollBar;
+                passwordTextBox.Text = "Password";
+                passwordTextBox.UseSystemPasswordChar = false;
+                passwordTextBox.ForeColor = System.Drawing.SystemColors.ScrollBar;
             }
         }
 
         private void login_Click(object sender, EventArgs e)
         {
-            if (txtUsernameLogin.Text == "Account")
-            {
-                txtUsernameLogin.Text = "! Chưa có dữ liệu";
-                txtUsernameLogin.ForeColor = System.Drawing.Color.Red;
-            }
-            if (txtPasswordLogin.Text == "Password")
-            {
-                txtPasswordLogin.Text = "! Chưa có dữ liệu";
-                txtPasswordLogin.ForeColor = System.Drawing.Color.Red;
-            }
-            if (txtUsernameLogin.Text != "Account" && txtPasswordLogin.Text != "Password" && txtUsernameLogin.Text != "" && txtPasswordLogin.Text != "" && txtUsernameLogin.Text != "! Chưa có dữ liệu" && txtPasswordLogin.Text != "! Chưa có dữ liệu")
+            IMembershipExecutor _executor = new EmptyFieldExecutor(new ValidateMemberExecutor(null, this));
+
+            _executor.Execute(
+                new List<string>
+                {
+                    usernameTextBox.Text, passwordTextBox.Text,
+                },
+                new List<TextBox>
+                {
+                    usernameTextBox, passwordTextBox
+                }
+            );
+            //Old code below (commented)
+
+            /*
+            if (usernameTextBox.Text != "Account" && passwordTextBox.Text != "Password" && usernameTextBox.Text != "" && passwordTextBox.Text != "" && usernameTextBox.Text != "Empty field" && passwordTextBox.Text != "Empty field")
             {
                 // Kết nối với MySQL bằng tk và mk đã setup trên MySQL
                 using (var connectionHelper = new SQLServer("Data Source=KIMTRINH\\SQLEXPRESS;Database=simple_enterprise_framework;Integrated Security=True;"))
                 {
                     if (connectionHelper.OpenConnection())
                     {
-                        string account = txtUsernameLogin.Text.Trim();
-                        string password = txtPasswordLogin.Text.Trim();
+                        string account = usernameTextBox.Text.Trim();
+                        string password = passwordTextBox.Text.Trim();
 
                         try
                         {
@@ -97,7 +210,7 @@ namespace SimpleEnterpriseFramework
                                 if (!string.IsNullOrEmpty(hashedPasswordFromDB) && HashPassword.hashPassword(password) == hashedPasswordFromDB)
                                 {
                                     MessageBox.Show("Đăng nhập thành công");
-                                    this.Hide();
+                                    HideForm();
                                     MainForm main = new MainForm();
                                     main.ShowDialog();
                                 }
@@ -118,14 +231,15 @@ namespace SimpleEnterpriseFramework
                         }
                     }
                 }
-            }
+            } */
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void register_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            HideForm();
             RegisterForm register = new RegisterForm();
             register.ShowDialog();
         }
+
     }
 }
