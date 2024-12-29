@@ -53,7 +53,7 @@ namespace SimpleEnterpriseFramework.DBSetting.Membership.CORs.Executor
 
                     // Get list tables name in database
                     List<string> tables = DatabaseInfo.Instance.GetAllTablesName();
-                    MainForm main = new MainForm();
+                    MainForm main = new MainForm("main form");
                     main.ShowDialog();
                 }
                 else

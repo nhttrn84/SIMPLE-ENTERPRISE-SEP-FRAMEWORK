@@ -18,7 +18,7 @@ namespace SimpleEnterpriseFramework.Builders.UIBuilder
             _instance.UseVisualStyleBackColor = false;
             _instance.AutoSize = true;
             _instance.Cursor = Cursors.Hand;   
-            _instance.Font = new Font("Arial", 10F, FontStyle.Regular);
+            _instance.Font = new Font("Arial", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
         }
 
         public IButton BackgroundColor(Color backgroundColor)
@@ -90,6 +90,14 @@ namespace SimpleEnterpriseFramework.Builders.UIBuilder
         public IButton WithImage(Image image)
         {
             _instance.Image = image;
+            _instance.RightToLeft = RightToLeft.No;
+            _instance.ImageAlign = ContentAlignment.MiddleLeft;
+            _instance.Padding = new Padding(15, 0, 0, 0);
+            _instance.Margin = new Padding(4);
+            _instance.FlatAppearance.BorderSize = 0;
+            _instance.FlatStyle = FlatStyle.Flat;
+            _instance.Font = new Font("Nirmala UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            _instance.UseVisualStyleBackColor = true;
             return this;
         }
     }

@@ -13,7 +13,7 @@ namespace SimpleEnterpriseFramework.DBSetting
         public string connectionData;
 
         private DatabaseInfo() {
-            connectionData = "Data Source=DESKTOP-7R66M1N\\SQLEXPRESS; Integrated Security=True;";
+            connectionData = "Data Source=KIMTRINH\\SQLEXPRESS; Integrated Security=True;";
         }
 
         public static DatabaseInfo Instance { 
@@ -25,7 +25,16 @@ namespace SimpleEnterpriseFramework.DBSetting
                 return _instance;
             } 
         }
-       
+
+        public void SetDatabaseName(string databaseName)
+        {
+            connectionData = $"Data Source=KIMTRINH\\SQLEXPRESS; Integrated Security=True; Initial Catalog={databaseName};";
+        }
+
+        public void ResetDatabaseName()
+        {
+            connectionData = "Data Source=KIMTRINH\\SQLEXPRESS; Integrated Security=True;";
+        }
 
         public List<string> GetAllTablesName()
         {
