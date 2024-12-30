@@ -97,6 +97,7 @@ namespace SimpleEnterpriseFramework
         private void InitializeGridView(string database)
         {
             DatabaseInfo.Instance.SetDatabaseName(database);
+            _sqlServerDao.UpdateConnectionString(DatabaseInfo.Instance.connectionData);
 
             List<string> tables = DatabaseInfo.Instance.GetAllTablesName();
 
@@ -148,7 +149,18 @@ namespace SimpleEnterpriseFramework
 
         private void btnDeleteRow_Click(object sender, EventArgs e)
         {
-
+            DataGridViewSelectedRowCollection selectedRows = this.dataGridView.SelectedRows;
+            if (selectedRows.Count <= 0)
+            {
+                MessageBox.Show("Chưa có dòng nào được chọn");
+                return;
+            }
+            foreach (DataGridViewRow row in selectedRows)
+            {
+                //TODO: Delete
+                Console.WriteLine(row.ToString());
+                ReloadData();
+            }
         }
 
         private void tableCombobox_SelectedIndexChanged(object sender, EventArgs e)
@@ -164,15 +176,7 @@ namespace SimpleEnterpriseFramework
         {
             try
             {
-                // Get the connection string from the SingletonDatabase
-
-                string connString = DatabaseInfo.Instance.connectionData;
-
-                // Use SqlServerProcessor to fetch table data
-                AbstractProcessData processor = new SQLServerProcess(connString);
-                string query = $"SELECT * FROM {tableName}";
-                DataTable tableData = processor.LoadData(query);
-                Console.WriteLine(tableData.ToString());
+                DataTable tableData = _sqlServerDao.LoadData(tableName);
 
                 // Bind the data to the DataGridView
                 dataGridView.DataSource = tableData;
@@ -185,6 +189,11 @@ namespace SimpleEnterpriseFramework
             {
                 MessageBox.Show($"Error loading table data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public void ReloadData()
+        {
+            dataGridView.DataSource = _sqlServerDao.LoadData(tableCombobox.SelectedItem.ToString());
         }
     }
 }

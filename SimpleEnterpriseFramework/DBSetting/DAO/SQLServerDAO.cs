@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
+using SimpleEnterpriseFramework.DBSetting.Membership.HashPassword;
 using static SimpleEnterpriseFramework.DBSetting.DAO.SQLServerProcess;
 
 namespace SimpleEnterpriseFramework.DBSetting.DAO
@@ -14,6 +15,18 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
         public SQLServerDAO(string connectionString)
         {
             this.ProcessData = new SQLServerProcess(connectionString);
+        }
+
+        public void UpdateConnectionString(string newConnectionString)
+        {
+            if (ProcessData is SQLServerProcess sqlServerProcess)
+            {
+                sqlServerProcess.ConnectionString = newConnectionString;
+            }
+            else
+            {
+                throw new InvalidOperationException("ProcessData is not of type SQLServerProcess.");
+            }
         }
 
         public override DataTable LoadData(string strNameTable)
@@ -140,7 +153,8 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
 
                 string u = data.Rows[0][1].ToString();
                 string p = data.Rows[0][2].ToString();
-                return username == u && password == p;
+                string hashedPassword = HashPassword.hashPassword(password);
+                return username == u && hashedPassword == p;
             }
             return false;
         }
@@ -149,7 +163,8 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
         {
 
             if (isExistUser(username)) return false;
-            string sql = string.Format("Insert Into Account Values('{0}','{1}','false')", username, password);
+            string hashedPassword = HashPassword.hashPassword(password);
+            string sql = string.Format("Insert Into Account Values('{0}','{1}','false')", username, hashedPassword);
             if (ProcessData.ExecuteData(sql) != 0)
                 return true;
             return false;

@@ -10,9 +10,25 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
 {
     public class SQLServerProcess : AbstractProcessData
     {
+        private string _connectionString;
+
         public SQLServerProcess(string connectionString)
         {
+            _connectionString = connectionString;
             connection = new SqlConnection(connectionString);
+        }
+
+        public string ConnectionString
+        {
+            get { return _connectionString; }
+            set
+            {
+                if (_connectionString != value)
+                {
+                    _connectionString = value;
+                    connection = new SqlConnection(_connectionString);
+                }
+            }
         }
 
         public override DataTable LoadData(string sql)
