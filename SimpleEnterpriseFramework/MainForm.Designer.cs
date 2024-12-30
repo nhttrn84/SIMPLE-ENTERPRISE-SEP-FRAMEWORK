@@ -1,5 +1,7 @@
 ﻿
 using System.Windows.Forms;
+using SimpleEnterpriseFramework.DBSetting;
+using SimpleEnterpriseFramework.DBSetting.DAO;
 
 namespace SimpleEnterpriseFramework
 {
@@ -29,6 +31,7 @@ namespace SimpleEnterpriseFramework
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
+        private readonly SQLServerDAO _sqlServerDao = new SQLServerDAO(DatabaseInfo.Instance.connectionData);
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();

@@ -16,6 +16,18 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
             this.ProcessData = new SQLServerProcess(connectionString);
         }
 
+        public void UpdateConnectionString(string newConnectionString)
+        {
+            if (ProcessData is SQLServerProcess sqlServerProcess)
+            {
+                sqlServerProcess.ConnectionString = newConnectionString;
+            }
+            else
+            {
+                throw new InvalidOperationException("ProcessData is not of type SQLServerProcess.");
+            }
+        }
+
         public override DataTable LoadData(string strNameTable)
         {
             string sql = "Select * From " + strNameTable;
