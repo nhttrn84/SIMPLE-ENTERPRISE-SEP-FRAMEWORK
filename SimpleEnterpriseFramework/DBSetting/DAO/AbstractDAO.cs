@@ -15,9 +15,9 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
 
         public abstract DataTable LoadData(string strNameTable);
 
-        public abstract bool InsertData(Dictionary<string, string> data, string strNameTable);
+        public abstract bool InsertData(Dictionary<string, string> data, string strNameTable, string database);
 
-        public abstract bool UpdateData(Dictionary<string, string> data, string strNameTable, string primaryKey);
+        public abstract bool UpdateData(Dictionary<string, string> data, string strNameTable, string database);
 
         public abstract bool DeleteData(string strNameTable, string primaryKey, string keyValue);
 

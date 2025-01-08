@@ -13,7 +13,7 @@ namespace SimpleEnterpriseFramework.DBSetting
         public List<string> GetDatabaseNames()
         {
             List<string> databaseNames = new List<string>();
-            string connectionString = "Data Source=KIMTRINH\\SQLEXPRESS; Integrated Security=True;";
+            string connectionString = "Data Source=DESKTOP-67S48US\\SQLEXPRESS; Integrated Security=True;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

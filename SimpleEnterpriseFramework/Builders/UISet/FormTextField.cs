@@ -64,5 +64,10 @@ namespace SimpleEnterpriseFramework.Builders.UIBuilder
             _label.Text = labelText;
             _textBox.Text = value;
         }
+
+        public void setDisable()
+        {
+            _textBox.Enabled = false;
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace SimpleEnterpriseFramework.DBSetting
         public string connectionData;
 
         private DatabaseInfo() {
-            connectionData = "Data Source=KIMTRINH\\SQLEXPRESS; Integrated Security=True;";
+            connectionData = "Data Source=DESKTOP-67S48US\\SQLEXPRESS; Integrated Security=True;";
         }
 
         public static DatabaseInfo Instance { 
@@ -28,12 +28,12 @@ namespace SimpleEnterpriseFramework.DBSetting
 
         public void SetDatabaseName(string databaseName)
         {
-            connectionData = $"Data Source=KIMTRINH\\SQLEXPRESS; Integrated Security=True; Initial Catalog={databaseName};";
+            connectionData = $"Data Source=DESKTOP-67S48US\\SQLEXPRESS; Integrated Security=True; Initial Catalog={databaseName};";
         }
 
         public void ResetDatabaseName()
         {
-            connectionData = "Data Source=KIMTRINH\\SQLEXPRESS; Integrated Security=True;";
+            connectionData = "Data Source=DESKTOP-67S48US\\SQLEXPRESS; Integrated Security=True;";
         }
 
         public List<string> GetAllTablesName()
@@ -55,6 +55,37 @@ namespace SimpleEnterpriseFramework.DBSetting
             }
             return listTables;
         }
+
+        public List<string> GetPrimaryKeyColumns(string tableName)
+        {
+            List<string> primaryKeyColumns = new List<string>();
+            string query = $@"
+        SELECT COLUMN_NAME
+        FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+        WHERE TABLE_NAME = @TableName AND CONSTRAINT_NAME = (
+            SELECT CONSTRAINT_NAME
+            FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+            WHERE TABLE_NAME = @TableName AND CONSTRAINT_TYPE = 'PRIMARY KEY'
+        )";
+
+            using (SqlConnection connection = new SqlConnection(connectionData))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@TableName", tableName);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            primaryKeyColumns.Add(reader["COLUMN_NAME"].ToString());
+                        }
+                    }
+                }
+            }
+            return primaryKeyColumns;
+        }
+
 
     }
 }
