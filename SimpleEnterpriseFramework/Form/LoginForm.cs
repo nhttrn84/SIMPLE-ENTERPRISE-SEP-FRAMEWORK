@@ -8,14 +8,23 @@ using SimpleEnterpriseFramework.DBSetting.Membership.HashPassword;
 using SimpleEnterpriseFramework.Builders.UIBuilder;
 using SimpleEnterpriseFramework.DBSetting.Membership.CORs;
 using SimpleEnterpriseFramework.DBSetting.Membership.CORs.Executor;
+using SimpleEnterpriseFramework.Interfaces.Authenticate;
+using Mysqlx.Session;
+using SimpleEnterpriseFramework.DI;
 
 namespace SimpleEnterpriseFramework
 {
-    public partial class LoginForm : BaseForm
+    public partial class LoginForm : BaseForm, IAuthenticateForm
     {
         private TextBox usernameTextBox, passwordTextBox;
         private Button loginButton, registerButton;
+        public event EventHandler SubmitClicked;
+        public event EventHandler SwitchClicked;
 
+        public LoginForm() : this("Login")
+        {
+
+        }
 
         public LoginForm(string name) : base(name, "Login Form", new Size(width: 800, height: 480))
         {
@@ -100,13 +109,6 @@ namespace SimpleEnterpriseFramework
             ResumeLayout(false);
         }
 
-        public LoginForm() : this("Login")
-        {
-        }
-
-
-
-       
         public void ShowForm()
         {
             this.Show();
@@ -120,11 +122,6 @@ namespace SimpleEnterpriseFramework
         public void ShowError(string errorMessage)
         {
             MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
- 
-        }
-        // Gọi sự kiện đăng nhập khi người dùng nhấn nút đăng nhập
-        public void SetTables(List<string> tables)
-        {
  
         }
 
@@ -166,6 +163,16 @@ namespace SimpleEnterpriseFramework
             }
         }
 
+        private void OnLoginClicked()
+        {
+            SubmitClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnRegisterClicked()
+        {
+            SwitchClicked?.Invoke(this, EventArgs.Empty);
+        }
+
         private void login_Click(object sender, EventArgs e)
         {
             IMembershipExecutor _executor = new EmptyFieldExecutor(new ValidateMemberExecutor(null, this));
@@ -185,8 +192,9 @@ namespace SimpleEnterpriseFramework
         private void register_Click(object sender, EventArgs e)
         {
             HideForm();
-            RegisterForm register = new RegisterForm();
-            register.ShowDialog();
+            IoCContainer.Register<IAuthenticateForm, RegisterForm>();
+            IAuthenticateForm register = IoCContainer.Resolve<IAuthenticateForm>();
+            register.ShowForm();
         }
 
     }

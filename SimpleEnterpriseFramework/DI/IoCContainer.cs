@@ -12,7 +12,7 @@ namespace SimpleEnterpriseFramework.DI
         private static readonly Dictionary<Type, Func<object>> _registerHandler = new Dictionary<Type, Func<object>>();
 
         // Register an interface with returner.
-        public void Register<TInterface, TImplementation>() where TImplementation : TInterface
+        public static void Register<TInterface, TImplementation>() where TImplementation : TInterface
         {
             //Error throwing
             if (!typeof(TInterface).IsAssignableFrom(typeof(TImplementation)))
@@ -51,13 +51,13 @@ namespace SimpleEnterpriseFramework.DI
 
         
         // Register an instance
-        public void RegisterInstance<TInterface>(TInterface instance)
+        public static void RegisterInstance<TInterface>(TInterface instance)
         {
             _registerHandler[typeof(TInterface)] = () => instance;
         }
 
         // Resolve service (create)
-        public TInterface Resolve<TInterface>()
+        public static TInterface Resolve<TInterface>()
         {
             return (TInterface)Resolving(typeof(TInterface));
         }
@@ -65,7 +65,7 @@ namespace SimpleEnterpriseFramework.DI
         {
             if (_registerHandler.ContainsKey(interfaceType))
             {
-                return _registerHandler[interfaceType];
+                return _registerHandler[interfaceType]();
             }
             throw new Exception($"Dependency: {interfaceType} not registered.");
         }

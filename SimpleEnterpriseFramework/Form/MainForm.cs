@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using SimpleEnterpriseFramework.DI;
+using SimpleEnterpriseFramework.Interfaces.Authenticate;
 using SimpleEnterpriseFramework.Builders.UIBuilder;
 using SimpleEnterpriseFramework.DBSetting;
 using SimpleEnterpriseFramework.DBSetting.DAO;
@@ -122,10 +124,11 @@ namespace SimpleEnterpriseFramework
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
+            IoCContainer.Register<IAuthenticateForm, LoginForm>();
             _sqlServerDao.UpdateConnectionString(ConfigurationManager.AppSettings["ConnectionString"]);
             this.Hide();
-            LoginForm login = new LoginForm();
-            login.ShowDialog();
+            IAuthenticateForm login = IoCContainer.Resolve<IAuthenticateForm>();
+            login.ShowForm();
         }
 
         private void btnAddRow_Click(object sender, EventArgs e)

@@ -14,6 +14,5 @@ namespace SimpleEnterpriseFramework.Interfaces.Authenticate
         void ShowForm();
         void HideForm();
         void ShowError(string errorMessage);
-        void SetTables(List<string> tables);
     }
 }

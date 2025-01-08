@@ -16,10 +16,16 @@ using SimpleEnterpriseFramework.Interfaces.Authenticate;
 
 namespace SimpleEnterpriseFramework
 {
-    public partial class RegisterForm : BaseForm
+    public partial class RegisterForm : BaseForm, IAuthenticateForm
     {
         private TextBox usernameTextBoxReg, passwordTextBoxReg, confirmPasswordTextBoxReg;
         private Button loginButtonReg, registerButtonReg;
+        public event EventHandler SubmitClicked;
+        public event EventHandler SwitchClicked;
+        public RegisterForm() : this("Register")
+        {
+
+        }
         public RegisterForm(string name) : base(name, "Register Form", new Size(width: 800, height: 480))
         {
             InitializeComponent();
@@ -115,13 +121,6 @@ namespace SimpleEnterpriseFramework
             this.Controls.Add(container);
             ResumeLayout(false);
         }
-
-        public RegisterForm() : this("Register")
-        {
-        }
-
-
-
         private void RegisterForm_Load(object sender, EventArgs e)
         {
 
@@ -144,10 +143,7 @@ namespace SimpleEnterpriseFramework
             MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
  
         }
-        public void SetTables(List<string> tables)
-        {
- 
-        }
+
         private void textUserName_Enter(object sender, EventArgs e)
         {
             if (usernameTextBoxReg.Text == "Account" || usernameTextBoxReg.Text == "Empty field")
@@ -205,7 +201,17 @@ namespace SimpleEnterpriseFramework
                 confirmPasswordTextBoxReg.ForeColor = System.Drawing.SystemColors.ScrollBar;
             }
         }
-        
+
+        private void OnLoginClicked()
+        {
+            SwitchClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnRegisterClicked()
+        {
+            SubmitClicked?.Invoke(this, EventArgs.Empty);
+        }
+
         private void login_Click(object sender, EventArgs e)
         {
             HideForm();
@@ -227,107 +233,7 @@ namespace SimpleEnterpriseFramework
                 {
                     usernameTextBoxReg, passwordTextBoxReg, confirmPasswordTextBoxReg
                 }
-                );
-
-            //Old code below (in comment)
-
-            /*
-            bool pass = true;
-            if (usernameTextBoxReg.Text == "Account" || usernameTextBoxReg.Text == "")
-            {
-                usernameTextBoxReg.Text = "Empty field";
-                usernameTextBoxReg.ForeColor = System.Drawing.Color.Red;
-            }
-            if (passwordTextBoxReg.Text == "Password" || passwordTextBoxReg.Text == "")
-            {
-                passwordTextBoxReg.Text = "Empty field";
-                passwordTextBoxReg.ForeColor = System.Drawing.Color.Red;
-                pass = false;
-            }
-            if (confirmPasswordTextBoxReg.Text == "RePassword" || confirmPasswordTextBoxReg.Text == "")
-            {
-                confirmPasswordTextBoxReg.Text = "Empty field";
-                confirmPasswordTextBoxReg.ForeColor = System.Drawing.Color.Red;
-                pass = false;
-            }
-            if (!pass) return;
-
-            
-            if (passwordTextBoxReg.Text == "Empty field" || confirmPasswordTextBoxReg.Text == "Empty field")
-            {
-                pass = false;
-            }
-            if (passwordTextBoxReg.Text != confirmPasswordTextBoxReg.Text && confirmPasswordTextBoxReg.Text != "Empty field")
-            {
-                confirmPasswordTextBoxReg.Text = "Password mismatch";
-                confirmPasswordTextBoxReg.UseSystemPasswordChar = false;
-                confirmPasswordTextBoxReg.ForeColor = System.Drawing.Color.Red;
-                pass = false;
-            }
-            if (pass)
-            {
-                using (var connectionHelper = new SQLServer("Data Source=KIMTRINH\\SQLEXPRESS;Database=simple_enterprise_framework;Integrated Security=True;"))
-                {
-                    Console.WriteLine("Connect successful");
-                    if (connectionHelper.OpenConnection())
-                    {
-                        string account = usernameTextBoxReg.Text.Trim();
-                        string password = passwordTextBoxReg.Text.Trim();
-
-
-                        try
-                        {
-                            using (var command = connectionHelper.GetConnection().CreateCommand())
-                            {
-                                // Kiểm tra xem tên người dùng đã tồn tại chưa
-                                string checkUserQuery = "SELECT COUNT(*) FROM member WHERE username = @Username";
-                                command.CommandText = checkUserQuery;
-                                command.Parameters.AddWithValue("@Username", account);
-
-                                int existingUserCount = Convert.ToInt32(command.ExecuteScalar());
-
-                                if (existingUserCount > 0)
-                                {
-                                    MessageBox.Show("Tài khoản đã tồn tại. Vui lòng chọn một tên người dùng khác.");
-                                }
-                                else
-                                {
-                                    // Thêm tài khoản mới vào cơ sở dữ liệu
-                                    string insertUserQuery = "INSERT INTO member (username, password) VALUES (@Username, @Password)";
-                                    command.CommandText = insertUserQuery;
-                                    command.Parameters.Clear(); // Xóa các tham số cũ
-
-                                    // Băm mật khẩu trước khi lưu vào cơ sở dữ liệu
-                                    string hashedPassword = HashPassword.hashPassword(password);
-
-                                    command.Parameters.AddWithValue("@Username", account);
-                                    command.Parameters.AddWithValue("@Password", hashedPassword);
-
-                                    int rowsAffected = command.ExecuteNonQuery();
-
-                                    if (rowsAffected > 0)
-                                    {
-                                        MessageBox.Show("Đăng ký thành công");
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("Đăng ký thất bại");
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}");
-                        }
-                        finally
-                        {
-                            // Đóng kết nối sau khi thực hiện xong
-                            connectionHelper.CloseConnection();
-                        }
-                    }
-                }
-            } */
+            );
         }
 
     }

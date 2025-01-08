@@ -82,6 +82,10 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
         {
             // Retrieve primary key columns for the table
             List<string> primaryKeyColumns = this.ProcessData.GetPrimaryKeyColumns(database);
+            for (int i = 0; i < primaryKeyColumns.Count; i++)
+            {
+                Console.WriteLine("primary key " + primaryKeyColumns[i]);
+            }    
 
             string sql = $"USE {database} UPDATE {strNameTable} SET ";
             int index = 0;
