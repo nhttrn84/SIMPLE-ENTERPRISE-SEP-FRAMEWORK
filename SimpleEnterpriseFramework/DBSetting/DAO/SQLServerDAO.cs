@@ -43,9 +43,10 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
             return result.Rows[0].Field<string>(0);
         }
 
-        public override bool InsertData(Dictionary<string, string> data, string strNameTable)
+        public override bool InsertData(Dictionary<string, string> data, string strNameTable, string database)
         {
-            string sql = "Insert Into " + strNameTable + " Values(";
+
+            string sql = $"USE {database} Insert Into {strNameTable} Values(";
             for (int i = 0; i < data.Count; i++)
             {
                 if (i < data.Count - 1)
@@ -70,24 +71,33 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
             return true;
         }
 
-        public override bool UpdateData(Dictionary<string, string> data, string strNameTable, string primaryKey)
+        public override bool UpdateData(Dictionary<string, string> data, string strNameTable, string database)
         {
-            string sql = "Update " + strNameTable + " Set ";
-            for (int i = 0; i < data.Count; i++)
+            // Retrieve primary key columns for the table
+            List<string> primaryKeyColumns = DatabaseInfo.Instance.GetPrimaryKeyColumns(strNameTable);
+
+            string sql = $"USE {database} UPDATE {strNameTable} SET ";
+            int index = 0;
+
+            // Construct the SET clause
+            List<string> setClause = new List<string>();
+            foreach (var entry in data)
             {
-                if (data.ElementAt(i).Key != primaryKey)
+                if(!primaryKeyColumns.Contains(entry.Key))
                 {
-                    if (i < data.Count - 1)
-                    {
-                        sql += (data.ElementAt(i).Key + " = N'" + data.ElementAt(i).Value + "', ");
-                    }
-                    else
-                    {
-                        sql += (data.ElementAt(i).Key + " = N'" + data.ElementAt(i).Value + "'");
-                    }
+                    setClause.Add($"{entry.Key} = '{entry.Value}'");
                 }
             }
-            sql += " Where " + primaryKey + " = " + data[primaryKey];
+            sql += string.Join(",", setClause);
+
+            // Construct the WHERE clause using the primary key columns
+            sql += " WHERE ";
+            List<string> setclause2 = new List<string>();
+            foreach (var key in primaryKeyColumns)
+            {
+                setclause2.Add($"{key} = '{data[key]}'");
+            }
+            sql += string.Join(" AND ", setclause2);
 
             try
             {
@@ -100,6 +110,7 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
 
             return true;
         }
+
 
         public override bool DeleteData(string strNameTable, string primaryKey, string keyValue)
         {

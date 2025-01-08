@@ -130,7 +130,7 @@ namespace SimpleEnterpriseFramework
 
         private void btnAddRow_Click(object sender, EventArgs e)
         {
-            
+            new HandleForm(this, HandleForm.SaveType.Insert, this.dataGridView.Rows[0], tableCombobox.SelectedItem.ToString(), dbCombobox.SelectedItem.ToString()).Show();
         }
 
         private void dbCombobox_SelectedIndexChanged(object sender, EventArgs e)
@@ -144,6 +144,13 @@ namespace SimpleEnterpriseFramework
 
         private void btnEditRow_Click(object sender, EventArgs e)
         {
+            DataGridViewSelectedRowCollection selectedRows = this.dataGridView.SelectedRows;
+            if (selectedRows.Count <= 0)
+            {
+                MessageBox.Show("Chưa có dòng nào được chọn!");
+                return;
+            }
+            new HandleForm(this, HandleForm.SaveType.Update, selectedRows[0], tableCombobox.SelectedItem.ToString(), dbCombobox.SelectedItem.ToString()).Show();
 
         }
 
