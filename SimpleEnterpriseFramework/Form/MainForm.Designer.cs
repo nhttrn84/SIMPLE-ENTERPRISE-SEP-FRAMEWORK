@@ -31,7 +31,7 @@ namespace SimpleEnterpriseFramework
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private readonly SQLServerDAO _sqlServerDao = new SQLServerDAO(DatabaseInfo.Instance.connectionData);
+        private readonly SQLServerDAO _sqlServerDao = new SQLServerDAO();
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();

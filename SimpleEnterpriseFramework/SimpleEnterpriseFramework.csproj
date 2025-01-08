@@ -101,7 +101,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseForm.cs">
+    <Compile Include="Form\BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Builders\UIBuilder\BaseFormBuilder.cs">
@@ -118,41 +118,38 @@
     <Compile Include="Builders\UISet\PanelSet.cs" />
     <Compile Include="DBSetting\DAO\AbstractDAO.cs" />
     <Compile Include="DBSetting\DAO\AbstractProcessData.cs" />
-    <Compile Include="DBSetting\DAO\SQLServerDAO.cs" />
-    <Compile Include="DBSetting\DAO\SQLServerProcess.cs" />
-    <Compile Include="DBSetting\Database.cs" />
-    <Compile Include="DBSetting\DatabaseInfo.cs" />
+    <Compile Include="DBSetting\SQLServer\SQLServerDAO.cs" />
+    <Compile Include="DBSetting\SQLServer\SQLServerProcess.cs" />
     <Compile Include="DBSetting\Membership\CORs\Executor\EmptyFieldExecutor.cs" />
     <Compile Include="DBSetting\Membership\CORs\Executor\IMembershipExecutor.cs" />
     <Compile Include="DBSetting\Membership\CORs\Executor\PasswordMatchExecutor.cs" />
     <Compile Include="DBSetting\Membership\CORs\Executor\ValidateMemberExecutor.cs" />
     <Compile Include="DBSetting\Membership\HashPassword.cs" />
     <Compile Include="DBSetting\Membership\Membership.cs" />
-    <Compile Include="DBSetting\SQLServer\SQLServer.cs" />
     <Compile Include="DI\IoCContainer.cs" />
-    <Compile Include="HandleForm.cs">
+    <Compile Include="Form\HandleForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HandleForm.Designer.cs">
+    <Compile Include="Form\HandleForm.Designer.cs">
       <DependentUpon>HandleForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\Authenticate\IAuthenticate.cs" />
-    <Compile Include="LoginForm.Designer.cs">
+    <Compile Include="Form\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="RegisterForm.cs">
+    <Compile Include="Form\RegisterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RegisterForm.Designer.cs">
+    <Compile Include="Form\RegisterForm.Designer.cs">
       <DependentUpon>RegisterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="LoginForm.cs">
+    <Compile Include="Form\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.cs">
+    <Compile Include="Form\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Form\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -160,11 +157,12 @@
     <EmbeddedResource Include="Builders\UIBuilder\BaseFormBuilder.resx">
       <DependentUpon>BaseFormBuilder.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LoginForm.resx">
+    <EmbeddedResource Include="Form\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Form\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -176,7 +174,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="RegisterForm.resx">
+    <EmbeddedResource Include="Form\RegisterForm.resx">
       <DependentUpon>RegisterForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
@@ -193,9 +191,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Form\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\avatar-icon-images-20.png" />
   </ItemGroup>

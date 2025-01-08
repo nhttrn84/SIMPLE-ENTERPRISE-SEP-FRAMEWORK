@@ -26,7 +26,7 @@ namespace SimpleEnterpriseFramework.DBSetting.Membership.CORs.Executor
             if (boxValue.Count > 2)
             {
                 // Thực hiện đăng ký tài khoản
-                Membership p = new Membership(DatabaseInfo.Instance.connectionData);
+                Membership p = new Membership();
                 if (p.Register(boxValue[0], boxValue[1]))
                 {
                     MessageBox.Show("Đăng ký thành công", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -44,15 +44,12 @@ namespace SimpleEnterpriseFramework.DBSetting.Membership.CORs.Executor
             //Login logic here:
             else
             {
-                Membership p = new Membership(DatabaseInfo.Instance.connectionData);
+                Membership p = new Membership();
                 if (p.Login(boxValue[0], boxValue[1]))
                 {
                     MessageBox.Show("Đăng nhập thành công", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //Dissapear login form
                     currentScreen.Hide();
-
-                    // Get list tables name in database
-                    List<string> tables = DatabaseInfo.Instance.GetAllTablesName();
                     MainForm main = new MainForm("main form");
                     main.ShowDialog();
                 }

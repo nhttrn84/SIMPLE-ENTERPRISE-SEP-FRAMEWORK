@@ -12,8 +12,13 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
         protected AbstractProcessData ProcessData;
 
         public abstract string GetPrimaryKey(string strNameTable);
+        public abstract List<string> GetPrimaryKeyColumns(string strNameTable);
 
         public abstract DataTable LoadData(string strNameTable);
+
+        public abstract List<string> GetDatabaseNames();
+
+        public abstract List<string> GetAllTablesName();
 
         public abstract bool InsertData(Dictionary<string, string> data, string strNameTable, string database);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -82,8 +83,7 @@ namespace SimpleEnterpriseFramework
 
         private void InitializeDatabase()
         {
-            Database database = new Database();
-            List<string> databaseNames = database.GetDatabaseNames();
+            List<string> databaseNames = _sqlServerDao.GetDatabaseNames();
 
             // Bind the databaseNames list to the ComboBox
             dbCombobox.DataSource = databaseNames;
@@ -96,10 +96,10 @@ namespace SimpleEnterpriseFramework
 
         private void InitializeGridView(string database)
         {
-            DatabaseInfo.Instance.SetDatabaseName(database);
-            _sqlServerDao.UpdateConnectionString(DatabaseInfo.Instance.connectionData);
+            string connectionData = $"{ConfigurationManager.AppSettings["ConnectionString"]} Initial Catalog={database};";
+            _sqlServerDao.UpdateConnectionString(connectionData);
 
-            List<string> tables = DatabaseInfo.Instance.GetAllTablesName();
+            List<string> tables = _sqlServerDao.GetAllTablesName();
 
             // Bind the databaseNames list to the ComboBox
             tableCombobox.DataSource = tables;
@@ -122,7 +122,7 @@ namespace SimpleEnterpriseFramework
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            DatabaseInfo.Instance.ResetDatabaseName();
+            _sqlServerDao.UpdateConnectionString(ConfigurationManager.AppSettings["ConnectionString"]);
             this.Hide();
             LoginForm login = new LoginForm();
             login.ShowDialog();

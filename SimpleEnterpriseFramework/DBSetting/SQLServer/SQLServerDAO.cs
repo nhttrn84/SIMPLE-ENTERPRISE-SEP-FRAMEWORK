@@ -1,131 +1,204 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms;
+using System.Security.Authentication;
+using System.Text;
+using System.Threading.Tasks;
+using SimpleEnterpriseFramework.DBSetting.Membership.HashPassword;
+using static SimpleEnterpriseFramework.DBSetting.DAO.SQLServerProcess;
 
-namespace SimpleEnterpriseFramework.DBSetting.SQLServer
+namespace SimpleEnterpriseFramework.DBSetting.DAO
 {
-    class SqlServerDAO
+    public class SQLServerDAO : AbstractDAO
     {
-        private readonly SqlServerProcessor processor;
-
-        public SqlServerDAO(string connection)
+        public SQLServerDAO()
         {
-            processor = new SqlServerProcessor(connection);
+            this.ProcessData = SQLServerProcess.Instance;
         }
 
-        public void CreateMemberTable()
+        public void UpdateConnectionString(string newConnectionString)
         {
-            string checkTableSql = "SELECT * FROM information_schema.tables WHERE table_schema = 'dbo' AND table_name = 'member'";
-            DataTable dataTable = processor.GetAllData(checkTableSql);
-            bool tableExists = dataTable.Rows.Count > 0;
+            SQLServerProcess.Instance.ConnectionString = newConnectionString;
+        }
 
-            if (!tableExists)
+        public override DataTable LoadData(string strNameTable)
+        {
+            string sql = "Select * From " + strNameTable;
+            DataTable result = ProcessData.LoadData(sql);
+            return result;
+        }
+
+        public override string GetPrimaryKey(string strNameTable)
+        {
+            string sql = "SELECT u.COLUMN_NAME, c.CONSTRAINT_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS c INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS u ON c.CONSTRAINT_NAME = u.CONSTRAINT_NAME where u.TABLE_NAME = '" + strNameTable + "' AND c.TABLE_NAME = '" + strNameTable + "' and c.CONSTRAINT_TYPE = 'PRIMARY KEY'";
+            DataTable result = ProcessData.LoadData(sql);
+            return result.Rows[0].Field<string>(0);
+        }
+
+        public override List<string> GetPrimaryKeyColumns(string strNameTable)
+        {
+            return this.ProcessData.GetPrimaryKeyColumns(strNameTable);
+        }
+
+        public override List<string> GetDatabaseNames()
+        {
+            return this.ProcessData.GetDatabaseNames();
+        }
+
+        public override List<string> GetAllTablesName()
+        {
+            return this.ProcessData.GetAllTablesName();
+        }
+
+        public override bool InsertData(Dictionary<string, string> data, string strNameTable, string database)
+        {
+            string sql = $"USE {database} Insert Into {strNameTable} Values(";
+            for (int i = 0; i < data.Count; i++)
             {
-                string createTableSql = "CREATE TABLE member (id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, username VARCHAR(30), password VARCHAR(30), isLogin BIT)";
-                processor.ExecuteNonQuery(createTableSql);
+                if (i < data.Count - 1)
+                {
+                    sql += ("N'" + data.ElementAt(i).Value + "', ");
+                }
+                else
+                {
+                    sql += ("N'" + data.ElementAt(i).Value + "')");
+                }
+            }
+
+            try
+            {
+                ProcessData.ExecuteData(sql);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return true;
+        }
+
+        public override bool UpdateData(Dictionary<string, string> data, string strNameTable, string database)
+        {
+            // Retrieve primary key columns for the table
+            List<string> primaryKeyColumns = this.ProcessData.GetPrimaryKeyColumns(database);
+
+            string sql = $"USE {database} UPDATE {strNameTable} SET ";
+            int index = 0;
+
+            // Construct the SET clause
+            List<string> setClause = new List<string>();
+            foreach (var entry in data)
+            {
+                if(!primaryKeyColumns.Contains(entry.Key))
+                {
+                    setClause.Add($"{entry.Key} = '{entry.Value}'");
+                }
+            }
+            sql += string.Join(",", setClause);
+
+            // Construct the WHERE clause using the primary key columns
+            sql += " WHERE ";
+            List<string> setclause2 = new List<string>();
+            foreach (var key in primaryKeyColumns)
+            {
+                setclause2.Add($"{key} = '{data[key]}'");
+            }
+            sql += string.Join(" AND ", setclause2);
+
+            try
+            {
+                ProcessData.ExecuteData(sql);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return true;
+        }
+
+
+        public override bool DeleteData(string strNameTable, string primaryKey, string keyValue)
+        {
+            string sql = "Delete From " + strNameTable + " Where " + primaryKey + " = " + keyValue;
+
+            try
+            {
+                ProcessData.ExecuteData(sql);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return true;
+        }
+
+        public override void CreateAccountTable()
+        {
+            if (!isExistTableAccount())
+            {
+                string sql = "Create Table Account(ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY, username varchar(30), password varchar(30), isLogin bit)";
+                ProcessData.ExecuteData(sql);
             }
         }
 
-        public bool CreateNewUser(string username, string password)
+        private bool isExistTableAccount()
         {
-            string checkUserSql = $"SELECT * FROM member WHERE username = '{username}'";
-            DataTable dataTable = processor.GetAllData(checkUserSql);
+            string sql = "SELECT * FROM INFORMATION_SCHEMA.TABLES Where Table_Schema = 'dbo'  AND Table_Name = 'Account'";
+            DataTable dataTable = ProcessData.LoadData(sql);
+            return dataTable.Rows.Count != 0;
+        }
 
-            if (dataTable.Rows.Count > 0)
+        public override bool ValidateUser(string username, string password)
+        {
+            if (Authentication(username, password))
             {
-                Console.WriteLine("User already exists.");
-                return false;
+                string sql = string.Format("Update Account Set isLogin = 'true' where username ='{0}'", username);
+                if (ProcessData.ExecuteData(sql) != 0)
+                    return true;
             }
+            return false;
+        }
 
-            string insertUserSql = "INSERT INTO member (username, password, isLogin) VALUES (@username, @password, 0)";
-            var parameters = new Dictionary<string, object> { { "username", username }, { "password", password } };
-
-            if (processor.ExecuteNonQuery(insertUserSql, parameters) > 0)
+        private bool Authentication(string username, string password)
+        {
+            var sql = string.Format("Select * from Account Where username = '{0}'", username);
+            DataTable data = ProcessData.LoadData(sql);
+            if (data.Rows.Count != 0)
             {
-                Console.WriteLine("User created successfully.");
+                string u = data.Rows[0][1].ToString();
+                string p = data.Rows[0][2].ToString();
+                string hashedPassword = HashPassword.hashPassword(password);
+                return username == u && hashedPassword == p;
+            }
+            return false;
+        }
+
+        public override bool CreateUser(string username, string password)
+        {
+            if (isExistUser(username)) return false;
+            string hashedPassword = HashPassword.hashPassword(password);
+            string sql = string.Format("Insert Into Account Values('{0}','{1}','false')", username, hashedPassword);
+            if (ProcessData.ExecuteData(sql) != 0)
                 return true;
-            }
-
-            Console.WriteLine("Failed to create user.");
             return false;
         }
 
-        public bool Authenticate(string username, string password)
+        private bool isExistUser(string username)
         {
-            string sql = $"SELECT * FROM member WHERE username = '{username}'";
-            DataTable data = processor.GetAllData(sql);
+            string sql = string.Format("Select * From Account Where username = '{0}'", username);
+            var data = ProcessData.LoadData(sql);
+            return data.Rows.Count != 0;
+        }
 
-            if (data.Rows.Count > 0)
-            {
-                string dbPassword = data.Rows[0]["password"].ToString();
-                return password == dbPassword;
-            }
-
+        public override bool SignOutUser(string username)
+        {
+            string sql = string.Format("Update Account Set isLogin = 'false' where username ='{0}'", username);
+            if (ProcessData.ExecuteData(sql) != 0)
+                return true;
             return false;
-        }
-
-        public bool CheckUserLogin(string username, string password)
-        {
-            if (Authenticate(username, password))
-            {
-                string updateLoginSql = "UPDATE member SET isLogin = 1 WHERE username = @username";
-                var parameters = new Dictionary<string, object> { { "username", username } };
-                return processor.ExecuteNonQuery(updateLoginSql, parameters) > 0;
-            }
-
-            return false;
-        }
-
-        public DataTable GetAllData(string tableName)
-        {
-            string sql = $"SELECT * FROM {tableName}";
-            return processor.GetAllData(sql);
-        }
-
-        public string GetPrimaryKey(string tableName)
-        {
-            string sql = $@"SELECT COLUMN_NAME 
-                            FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
-                            WHERE TABLE_NAME = '{tableName}'";
-            DataTable dataTable = processor.GetAllData(sql);
-            return dataTable.Rows[0]["COLUMN_NAME"].ToString();
-        }
-
-        public List<string> GetAllFieldsName(string tableName)
-        {
-            string sql = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{tableName}'";
-            DataTable dataTable = processor.GetAllData(sql);
-            return dataTable.Rows.Cast<DataRow>().Select(row => row["COLUMN_NAME"].ToString()).ToList();
-        }
-
-        public bool Insert(Dictionary<string, object> data, string tableName)
-        {
-            string columns = string.Join(", ", data.Keys);
-            string parameters = string.Join(", ", data.Keys.Select(k => "@" + k));
-            string sql = $"INSERT INTO {tableName} ({columns}) VALUES ({parameters})";
-
-            return processor.ExecuteNonQuery(sql, data) > 0;
-        }
-
-        public bool Update(Dictionary<string, object> data, string tableName)
-        {
-            string primaryKey = GetPrimaryKey(tableName);
-            string setClause = string.Join(", ", data.Keys.Where(k => k != primaryKey).Select(k => $"{k} = @{k}"));
-            string sql = $"UPDATE {tableName} SET {setClause} WHERE {primaryKey} = @{primaryKey}";
-
-            return processor.ExecuteNonQuery(sql, data) > 0;
-        }
-
-        public bool Delete(string tableName, object primaryKeyValue)
-        {
-            string primaryKey = GetPrimaryKey(tableName);
-            string sql = $"DELETE FROM {tableName} WHERE {primaryKey} = @primaryKey";
-            var parameters = new Dictionary<string, object> { { "primaryKey", primaryKeyValue } };
-
-            return processor.ExecuteNonQuery(sql, parameters) > 0;
         }
     }
 }

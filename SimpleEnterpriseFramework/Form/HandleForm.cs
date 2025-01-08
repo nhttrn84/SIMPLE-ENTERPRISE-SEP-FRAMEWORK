@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace SimpleEnterpriseFramework
 {
@@ -26,7 +27,7 @@ namespace SimpleEnterpriseFramework
         private MainForm mainFormRef;
         SaveType _sType;
         List<FormTextField> _fields = new List<FormTextField>();
-        SQLServerDAO sqlServerDAO = new SQLServerDAO("Data Source=DESKTOP-67S48US\\SQLEXPRESS; Integrated Security=True;");
+        SQLServerDAO sqlServerDAO = new SQLServerDAO();
         string _tableName = "";
         string _databaseName = "";
         List<string> primaryKeyColumns = new List<string>();
@@ -72,7 +73,7 @@ namespace SimpleEnterpriseFramework
             buttonLayoutPanel.ResumeLayout(false);
             ResumeLayout(false);
 
-            primaryKeyColumns = DatabaseInfo.Instance.GetPrimaryKeyColumns(tableName);
+            primaryKeyColumns = sqlServerDAO.GetPrimaryKeyColumns(tableName);
 
             if (type == SaveType.Insert)
             {

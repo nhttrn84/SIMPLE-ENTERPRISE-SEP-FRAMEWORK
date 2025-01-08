@@ -11,9 +11,9 @@ namespace SimpleEnterpriseFramework.DBSetting.Membership
     {
         private AbstractDAO dao;
 
-        public Membership(string connectionString)
+        public Membership()
         {
-            dao = new SQLServerDAO(connectionString);
+            dao = new SQLServerDAO();
             dao.CreateAccountTable();
         }
 
