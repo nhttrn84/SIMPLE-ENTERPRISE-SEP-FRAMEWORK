@@ -164,8 +164,18 @@ namespace SimpleEnterpriseFramework
             }
             foreach (DataGridViewRow row in selectedRows)
             {
-                //TODO: Delete
+                Dictionary<string, string> rowData = new Dictionary<string, string>();
+
+                // Iterate through each cell in the row
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    // Add the column name (or index) as the key, and the cell's value as the value
+                    rowData[cell.OwningColumn.Name] = cell.Value.ToString();
+                }
+
+
                 Console.WriteLine(row.ToString());
+
                 ReloadData();
             }
         }

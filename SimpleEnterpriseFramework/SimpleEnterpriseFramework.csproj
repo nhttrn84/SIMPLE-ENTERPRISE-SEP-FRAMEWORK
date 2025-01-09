@@ -140,6 +140,10 @@
     <Compile Include="LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Observer\NotifyButton.cs" />
+    <Compile Include="Observer\ObservableTextbox.cs" />
+    <Compile Include="Observer\Textfield.cs" />
+    <Compile Include="Observer\IObserver.cs" />
     <Compile Include="RegisterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,6 +161,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strategy\HandleInsert.cs" />
+    <Compile Include="Strategy\HandleUpdate.cs" />
+    <Compile Include="Strategy\IHandleDataStrategy.cs" />
+    <Compile Include="Strategy\StrategyFactory.cs" />
     <EmbeddedResource Include="Builders\UIBuilder\BaseFormBuilder.resx">
       <DependentUpon>BaseFormBuilder.cs</DependentUpon>
     </EmbeddedResource>

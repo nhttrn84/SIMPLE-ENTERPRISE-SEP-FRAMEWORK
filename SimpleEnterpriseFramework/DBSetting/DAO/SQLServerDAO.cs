@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Authentication;
 using System.Text;
@@ -34,13 +35,6 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
             string sql = "Select * From " + strNameTable;
             DataTable result = ProcessData.LoadData(sql);
             return result;
-        }
-
-        public override string GetPrimaryKey(string strNameTable)
-        {
-            string sql = "SELECT u.COLUMN_NAME, c.CONSTRAINT_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS c INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS u ON c.CONSTRAINT_NAME = u.CONSTRAINT_NAME where u.TABLE_NAME = '" + strNameTable + "' AND c.TABLE_NAME = '" + strNameTable + "' and c.CONSTRAINT_TYPE = 'PRIMARY KEY'";
-            DataTable result = ProcessData.LoadData(sql);
-            return result.Rows[0].Field<string>(0);
         }
 
         public override bool InsertData(Dictionary<string, string> data, string strNameTable, string database)
@@ -77,7 +71,6 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
             List<string> primaryKeyColumns = DatabaseInfo.Instance.GetPrimaryKeyColumns(strNameTable);
 
             string sql = $"USE {database} UPDATE {strNameTable} SET ";
-            int index = 0;
 
             // Construct the SET clause
             List<string> setClause = new List<string>();
@@ -112,9 +105,18 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
         }
 
 
-        public override bool DeleteData(string strNameTable, string primaryKey, string keyValue)
+        public override bool DeleteData(Dictionary<string, string> data, string strNameTable, string database)
         {
-            string sql = "Delete From " + strNameTable + " Where " + primaryKey + " = " + keyValue;
+            List<string> primaryKeyColumns = DatabaseInfo.Instance.GetPrimaryKeyColumns(strNameTable);
+
+            string sql = "Delete From " + strNameTable + " Where ";
+
+            List<string> setclause2 = new List<string>();
+            foreach (var key in primaryKeyColumns)
+            {
+                setclause2.Add($"{key} = '{data[key]}'");
+            }
+            sql += string.Join(" AND ", setclause2);
 
             try
             {

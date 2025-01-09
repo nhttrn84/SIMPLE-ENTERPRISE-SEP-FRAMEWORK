@@ -86,6 +86,35 @@ namespace SimpleEnterpriseFramework.DBSetting
             return primaryKeyColumns;
         }
 
+        public HashSet<string> GetExcludedColumns(string tableName)
+        {
+            HashSet<string> excludedColumns = new HashSet<string>();
+
+            using (SqlConnection connection = new SqlConnection(connectionData))
+            {
+                string query = @"
+            SELECT COLUMN_NAME
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_NAME = @TableName
+              AND (COLUMNPROPERTY(OBJECT_ID(TABLE_SCHEMA + '.' + TABLE_NAME), COLUMN_NAME, 'IsIdentity') = 1
+                   OR COLUMNPROPERTY(OBJECT_ID(TABLE_SCHEMA + '.' + TABLE_NAME), COLUMN_NAME, 'IsComputed') = 1)";
+
+
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@TableName", tableName);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        excludedColumns.Add(reader["COLUMN_NAME"].ToString());
+                    }
+                }
+            }
+
+            return excludedColumns;
+        }
 
     }
 }

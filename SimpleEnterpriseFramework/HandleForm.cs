@@ -1,7 +1,10 @@
-﻿using Org.BouncyCastle.Asn1.Crmf;
+﻿using Mysqlx;
+using Org.BouncyCastle.Asn1.Crmf;
 using SimpleEnterpriseFramework.Builders.UIBuilder;
 using SimpleEnterpriseFramework.DBSetting;
 using SimpleEnterpriseFramework.DBSetting.DAO;
+using SimpleEnterpriseFramework.Observer;
+using SimpleEnterpriseFramework.Strategy;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,15 +24,17 @@ namespace SimpleEnterpriseFramework
         {
             Insert = 0,
             Update = 1,
+            Delete = 3,
         }
 
         private MainForm mainFormRef;
         SaveType _sType;
-        List<FormTextField> _fields = new List<FormTextField>();
+        List<ObservableTextbox> _fields = new List<ObservableTextbox>();
         SQLServerDAO sqlServerDAO = new SQLServerDAO("Data Source=DESKTOP-67S48US\\SQLEXPRESS; Integrated Security=True;");
-        string _tableName = "";
-        string _databaseName = "";
-        List<string> primaryKeyColumns = new List<string>();
+        string _tableName;
+        string _databaseName;
+        List<string> primaryKeyColumns;
+        HashSet<string> excludedColumns;
 
 
         public HandleForm(MainForm mainForm, SaveType type, DataGridViewRow row, string tableName, string databaseName) : base(tableName, "Handle Form", new Size(width: 480, height: 450))
@@ -63,6 +68,7 @@ namespace SimpleEnterpriseFramework
                 .WithAnchorStyles(AnchorStyles.Left)
                 .ClickHandler((sender, e) => { btnConfirm_Click(sender, e); })
                 .Build();
+            btnConfirm.Enabled = false;
 
             buttonLayoutPanel.Controls.Add(btnCancel, 0, 0);
             buttonLayoutPanel.Controls.Add(btnConfirm, 2, 0);
@@ -73,6 +79,7 @@ namespace SimpleEnterpriseFramework
             ResumeLayout(false);
 
             primaryKeyColumns = DatabaseInfo.Instance.GetPrimaryKeyColumns(tableName);
+            excludedColumns = DatabaseInfo.Instance.GetExcludedColumns(tableName);
 
             if (type == SaveType.Insert)
             {
@@ -87,14 +94,35 @@ namespace SimpleEnterpriseFramework
 
             foreach (DataGridViewColumn col in row.DataGridView.Columns)
             {
-                string label = col.HeaderText;
-                string value = type == SaveType.Update ? row.Cells[col.Index].Value.ToString() : "";
-                FormTextField formTextField = new FormTextField(label, value);
-                if(type == SaveType.Update && primaryKeyColumns.Contains(label))
+                string columnName = col.HeaderText; // Get the column name (header text)
+                string initialValue = type == SaveType.Update
+                    ? row.Cells[col.Index].Value?.ToString() ?? ""
+                    : ""; // Get the value for updates or leave empty for new entries
+
+                // Skip columns that are in excludedColumns, but NOT in primaryKeyColumns and type is Insert
+                if (excludedColumns.Contains(columnName))
+                {
+                    if (type == SaveType.Insert)
+                        continue; // Skip the column if it's in excludedColumns and type is Insert
+
+                    // If type is Update, ensure excluded column is added regardless of being in primaryKeyColumns
+                }
+
+                // Create a form text field for the column
+                FormTextField formTextField = new FormTextField(columnName, initialValue);
+
+                // Disable the field if it's a primary key during updates
+                if (type == SaveType.Update && primaryKeyColumns.Contains(columnName))
                 {
                     formTextField.setDisable();
                 }
-                _fields.Add(formTextField);
+
+                var observableField = new ObservableTextbox(formTextField);
+                observableField.Attach(new NotifyButton(btnConfirm));
+
+
+                // Add the form text field to the collection
+                _fields.Add(observableField);
             }
 
             TableLayoutPanel panelBody = new TableLayoutPanel() { Name = "rowPanel", Dock = DockStyle.Fill, Padding = new Padding(0, 2, 0, 0) };
@@ -103,8 +131,8 @@ namespace SimpleEnterpriseFramework
 
             for (int i = 0; i < _fields.Count; ++i)
             {
-                panelBody.Controls.Add(_fields[i].ControlLabel, 0, i);
-                panelBody.Controls.Add(_fields[i].ControlTextBox, 1, i);
+                panelBody.Controls.Add(_fields[i].GetFormTextField().ControlLabel, 0, i);
+                panelBody.Controls.Add(_fields[i].GetFormTextField().ControlTextBox, 1, i);
             }
 
             panelBody.Controls.Add(new Control());
@@ -119,7 +147,7 @@ namespace SimpleEnterpriseFramework
                 ._fields
                 .Aggregate(new Dictionary<string, string>(), (acc, curr) =>
                 {
-                    acc[curr.LabelText] = curr.Value;
+                    acc[curr.GetFormTextField().LabelText] = curr.GetFormTextField().Value;
                     return acc;
                 });
         }
@@ -132,16 +160,9 @@ namespace SimpleEnterpriseFramework
         private void btnConfirm_Click(object sender, EventArgs e)
         {
             Dictionary<string, string> insertDict = this.GetFormDataAsDict();
-            if (this._sType == SaveType.Insert)
-            {
-                sqlServerDAO.InsertData(insertDict, this._tableName, this._databaseName);
-            }
-            else if (this._sType == SaveType.Update)
-            {
-                sqlServerDAO.UpdateData(insertDict, this._tableName, this._databaseName);
-            }
-            this.mainFormRef.ReloadData();
-            this.Dispose();
+            StrategyFactory.GetInstance().GetStrategy(_sType).HandleData(sqlServerDAO, insertDict, _tableName, _databaseName);
+                this.mainFormRef.ReloadData();
+                this.Dispose();
         }
     }
 }
