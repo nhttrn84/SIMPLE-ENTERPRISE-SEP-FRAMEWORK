@@ -11,7 +11,8 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
     {
         protected AbstractProcessData ProcessData;
 
-        public abstract string GetPrimaryKey(string strNameTable);
+        public abstract HashSet<string> GetExcludedColumns(string strNameTable);
+        
         public abstract List<string> GetPrimaryKeyColumns(string strNameTable);
 
         public abstract DataTable LoadData(string strNameTable);
@@ -24,7 +25,7 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
 
         public abstract bool UpdateData(Dictionary<string, string> data, string strNameTable, string database);
 
-        public abstract bool DeleteData(string strNameTable, string primaryKey, string keyValue);
+        public abstract bool DeleteData(Dictionary<string, string> data, string strNameTable, string database);
 
         public abstract void CreateAccountTable();
 

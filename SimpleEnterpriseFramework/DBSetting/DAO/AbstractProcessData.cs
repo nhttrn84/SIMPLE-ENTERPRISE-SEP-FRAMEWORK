@@ -22,5 +22,8 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
         public abstract List<string> GetAllTablesName();
 
         public abstract List<string> GetPrimaryKeyColumns(string tableName);
+
+        public abstract HashSet<string> GetExcludedColumns(string tableName);
+
     }
 }

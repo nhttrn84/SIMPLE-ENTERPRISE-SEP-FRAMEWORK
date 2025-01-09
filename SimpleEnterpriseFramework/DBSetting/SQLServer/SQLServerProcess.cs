@@ -201,5 +201,44 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
                 connection.Close();
             }
         }
+
+        public override HashSet<string> GetExcludedColumns(string tableName)
+        {
+            HashSet<string> excludedColumns = new HashSet<string>();
+            string query = @"
+            SELECT COLUMN_NAME
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_NAME = @TableName
+              AND (COLUMNPROPERTY(OBJECT_ID(TABLE_SCHEMA + '.' + TABLE_NAME), COLUMN_NAME, 'IsIdentity') = 1
+                   OR COLUMNPROPERTY(OBJECT_ID(TABLE_SCHEMA + '.' + TABLE_NAME), COLUMN_NAME, 'IsComputed') = 1)";
+            //connection.Open();
+
+            try
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@TableName", tableName);
+
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            excludedColumns.Add(reader["COLUMN_NAME"].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return excludedColumns;
+        }
     }
 }

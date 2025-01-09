@@ -29,11 +29,9 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
             return result;
         }
 
-        public override string GetPrimaryKey(string strNameTable)
+        public override HashSet<string> GetExcludedColumns(string strNameTable)
         {
-            string sql = "SELECT u.COLUMN_NAME, c.CONSTRAINT_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS c INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS u ON c.CONSTRAINT_NAME = u.CONSTRAINT_NAME where u.TABLE_NAME = '" + strNameTable + "' AND c.TABLE_NAME = '" + strNameTable + "' and c.CONSTRAINT_TYPE = 'PRIMARY KEY'";
-            DataTable result = ProcessData.LoadData(sql);
-            return result.Rows[0].Field<string>(0);
+            return this.ProcessData.GetExcludedColumns(strNameTable);
         }
 
         public override List<string> GetPrimaryKeyColumns(string strNameTable)
@@ -81,14 +79,13 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
         public override bool UpdateData(Dictionary<string, string> data, string strNameTable, string database)
         {
             // Retrieve primary key columns for the table
-            List<string> primaryKeyColumns = this.ProcessData.GetPrimaryKeyColumns(database);
+            List<string> primaryKeyColumns = this.ProcessData.GetPrimaryKeyColumns(strNameTable);
             for (int i = 0; i < primaryKeyColumns.Count; i++)
             {
                 Console.WriteLine("primary key " + primaryKeyColumns[i]);
             }    
 
             string sql = $"USE {database} UPDATE {strNameTable} SET ";
-            int index = 0;
 
             // Construct the SET clause
             List<string> setClause = new List<string>();
@@ -99,7 +96,7 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
                     setClause.Add($"{entry.Key} = '{entry.Value}'");
                 }
             }
-            sql += string.Join(",", setClause);
+            sql += string.Join(", ", setClause);
 
             // Construct the WHERE clause using the primary key columns
             sql += " WHERE ";
@@ -123,9 +120,17 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
         }
 
 
-        public override bool DeleteData(string strNameTable, string primaryKey, string keyValue)
+        public override bool DeleteData(Dictionary<string, string> data, string strNameTable, string database)
         {
-            string sql = "Delete From " + strNameTable + " Where " + primaryKey + " = " + keyValue;
+            List<string> primaryKeyColumns = this.ProcessData.GetPrimaryKeyColumns(strNameTable);
+
+            string sql = $"USE {database} Delete From {strNameTable} Where ";
+            List<string> setClauses = new List<string>();
+            foreach (var key in primaryKeyColumns)
+            {
+                setClauses.Add($"{key} = '{data[key]}'");
+            }
+            sql += string.Join(" AND ", setClauses);
 
             try
             {
