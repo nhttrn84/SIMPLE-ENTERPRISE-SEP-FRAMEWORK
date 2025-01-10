@@ -14,6 +14,7 @@ using SimpleEnterpriseFramework.Interfaces.Authenticate;
 using SimpleEnterpriseFramework.Builders.UIBuilder;
 using SimpleEnterpriseFramework.DBSetting;
 using SimpleEnterpriseFramework.DBSetting.DAO;
+using SimpleEnterpriseFramework.Strategy;
 
 namespace SimpleEnterpriseFramework
 {
@@ -167,8 +168,18 @@ namespace SimpleEnterpriseFramework
             }
             foreach (DataGridViewRow row in selectedRows)
             {
-                //TODO: Delete
                 Console.WriteLine(row.ToString());
+
+                Dictionary<string, string> rowData = new Dictionary<string, string>();
+
+                // Iterate through each cell in the row
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    // Add the column name (or index) as the key, and the cell's value as the value
+                    rowData[cell.OwningColumn.Name] = cell.Value.ToString();
+                }
+
+                StrategyFactory.GetInstance().GetStrategy(HandleForm.SaveType.Delete).HandleData(new SQLServerDAO(), rowData, tableCombobox.SelectedItem.ToString(), dbCombobox.SelectedItem.ToString());
                 ReloadData();
             }
         }
