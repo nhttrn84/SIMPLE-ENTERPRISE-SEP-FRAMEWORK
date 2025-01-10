@@ -128,6 +128,7 @@ namespace SimpleEnterpriseFramework
             TableLayoutPanel panelBody = new TableLayoutPanel() { Name = "rowPanel", Dock = DockStyle.Fill, Padding = new Padding(0, 2, 0, 0) };
             panelBody.RowCount = _fields.Count;
             panelBody.ColumnCount = 1;
+            panelBody.AutoScroll = true;
 
             for (int i = 0; i < _fields.Count; ++i)
             {
