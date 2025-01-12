@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SimpleEnterpriseFramework.Observer
 {
-    internal class ObservableFormTextField : IObservable
+    internal class ObservableFormTextField
     {
         private readonly FormTextField _textField;
         private readonly List<IObserver> _observers = new List<IObserver>();
@@ -36,7 +36,6 @@ namespace SimpleEnterpriseFramework.Observer
             }
         }
 
-        public FormTextField GetFormTextField() => _textField; // Access the original text fieldprivate List<IObserver> observers = new List<IObserver>();
-    
-}
+        public FormTextField GetFormTextField() => _textField;
+    }
 }
