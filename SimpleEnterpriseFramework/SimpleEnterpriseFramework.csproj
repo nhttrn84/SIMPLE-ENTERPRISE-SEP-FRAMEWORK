@@ -152,7 +152,6 @@
     <Compile Include="Form\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Observer\IObservable.cs" />
     <Compile Include="Observer\IObserver.cs" />
     <Compile Include="Observer\NotifyButton.cs" />
     <Compile Include="Observer\ObservableFormTextField.cs" />
