@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using SimpleEnterpriseFramework.Interfaces.Authenticate;
 
 namespace SimpleEnterpriseFramework.DBSetting.Membership.CORs.Executor
 {
@@ -32,9 +33,9 @@ namespace SimpleEnterpriseFramework.DBSetting.Membership.CORs.Executor
                     MessageBox.Show("Đăng ký thành công", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     currentScreen.Hide();
-                    LoginForm login = new LoginForm();
+                    IoCContainer.Register<IAuthenticateForm, LoginForm>();
+                    IAuthenticateForm login = IoCContainer.Resolve<IAuthenticateForm>();
                     login.ShowForm();
-                    
                 }
                 else
                 {

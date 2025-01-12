@@ -1,0 +1,339 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SimpleEnterpriseFramework.BaseFormBuilder" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEQAAAABAAIAAAAAAAAAAAgAAgIAAAAIAAAAQ=</HashCode>
+      <FileName>Builders\UIBuilder\BaseFormBuilder.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.BaseForm" Collapsed="true">
+    <Position X="3.75" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAQ=</HashCode>
+      <FileName>Form\BaseForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.HandleForm" Collapsed="true">
+    <Position X="0.5" Y="2" Width="2" />
+    <Members>
+      <Field Name="buttonLayoutPanel" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Field Name="panelBody" Hidden="true" />
+      <Field Name="panelBtn" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="SimpleEnterpriseFramework.HandleForm.SaveType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Form\HandleForm.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>BgAAAAEAACAAAAgAAACACEBCAgAEAAIAAAAAAAAAAMA=</HashCode>
+      <FileName>Form\HandleForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.LoginForm" Collapsed="true">
+    <Position X="2.75" Y="2" Width="2" />
+    <Members>
+      <Field Name="btnLogin" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Field Name="label1" Hidden="true" />
+      <Field Name="label6" Hidden="true" />
+      <Field Name="label7" Hidden="true" />
+      <Field Name="label8" Hidden="true" />
+      <Field Name="linkLabel1" Hidden="true" />
+      <Field Name="panel1" Hidden="true" />
+      <Field Name="panel2" Hidden="true" />
+      <Field Name="pictureBox1" Hidden="true" />
+      <Field Name="pictureBox2" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAByIAABAAAKyABAADAAAQgAAAABACAQBAAEI=</HashCode>
+      <FileName>Form\LoginForm.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.MainForm" Collapsed="true">
+    <Position X="5" Y="2" Width="1.75" />
+    <Members>
+      <Field Name="_sqlServerDao" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Field Name="dataGridView" Hidden="true" />
+      <Field Name="dbCombobox" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+      <Field Name="label1" Hidden="true" />
+      <Field Name="label2" Hidden="true" />
+      <Field Name="label3" Hidden="true" />
+      <Field Name="label4" Hidden="true" />
+      <Field Name="lb_Database" Hidden="true" />
+      <Field Name="lb_viewdata" Hidden="true" />
+      <Field Name="panel1" Hidden="true" />
+      <Field Name="panel3" Hidden="true" />
+      <Field Name="panelHeading" Hidden="true" />
+      <Field Name="tableCombobox" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAA4AAAACKASANQQEgSAACAGABAAAIAAAAAkASAQABA=</HashCode>
+      <FileName>Form\MainForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.RegisterForm" Collapsed="true">
+    <Position X="7" Y="2" Width="1.75" />
+    <Members>
+      <Field Name="btnRegister" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Field Name="label1" Hidden="true" />
+      <Field Name="label6" Hidden="true" />
+      <Field Name="label7" Hidden="true" />
+      <Field Name="label8" Hidden="true" />
+      <Field Name="label9" Hidden="true" />
+      <Field Name="linkLabel1" Hidden="true" />
+      <Field Name="panel1" Hidden="true" />
+      <Field Name="panel2" Hidden="true" />
+      <Field Name="pictureBox1" Hidden="true" />
+      <Field Name="pictureBox2" Hidden="true" />
+      <Field Name="pictureBox3" Hidden="true" />
+      <Field Name="txtPasswordRegister" Hidden="true" />
+      <Field Name="txtRePassword" Hidden="true" />
+      <Field Name="txtUserNameRegister" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>GAAAABAADioAABAAIYyDAAACAAAQgAQAQBADAQDAAEI=</HashCode>
+      <FileName>Form\RegisterForm.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.Program" Collapsed="true">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.Builders.UIBuilder.BasicTextBoxBuilder" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEACAAAAAAgIAgAAAEAAQAQAAAkAAAAAAACgQAAAA=</HashCode>
+      <FileName>Builders\UIBuilder\BasicTextBoxBuilder.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.Builders.UIBuilder.ButtonBuilder" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAIggAgAAAACAQACAAAgCAAAAAACgAAAAA=</HashCode>
+      <FileName>Builders\UIBuilder\ButtonBuilder.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.Builders.UIBuilder.FormTextField" Collapsed="true">
+    <Position X="17" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACgAAAAAAAAABAAAAACAEAAAAAAAAAgAIAAAAA=</HashCode>
+      <FileName>Builders\UISet\FormTextField.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.Builders.UIBuilder.PanelSet" Collapsed="true">
+    <Position X="15.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Builders\UISet\PanelSet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.DBSetting.DAO.AbstractDAO" Collapsed="true">
+    <Position X="0.5" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAEQAQAAAgAAAAAAAABCAAAEAgCQAAABAAAAA=</HashCode>
+      <FileName>DBSetting\DAO\AbstractDAO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.DBSetting.DAO.AbstractProcessData" Collapsed="true">
+    <Position X="5" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAIAAAJAAAABCAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>DBSetting\DAO\AbstractProcessData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.DBSetting.DAO.SQLServerDAO" Collapsed="true">
+    <Position X="2.75" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAESAQAAAgAAAAAAAABCAAOEAgCQAAABAAAAA=</HashCode>
+      <FileName>DBSetting\SQLServer\SQLServerDAO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.DBSetting.DAO.SQLServerProcess" Collapsed="true">
+    <Position X="7" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAQAAAoAAAIAAAABCAAAAAoQCAAAAAAAAA=</HashCode>
+      <FileName>DBSetting\SQLServer\SQLServerProcess.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.DBSetting.Membership.CORs.EmptyFieldExecutor" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAgAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>DBSetting\Membership\CORs\Executor\EmptyFieldExecutor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.DBSetting.Membership.CORs.Executor.PasswordMatchExecutor" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAgAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>DBSetting\Membership\CORs\Executor\PasswordMatchExecutor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.DBSetting.Membership.CORs.Executor.ValidateMemberExecutor" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAgAAAgAAAgAAAAAAA=</HashCode>
+      <FileName>DBSetting\Membership\CORs\Executor\ValidateMemberExecutor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.DBSetting.Membership.HashPassword.HashPassword" Collapsed="true">
+    <Position X="15.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DBSetting\Membership\HashPassword.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.DBSetting.Membership.Membership" Collapsed="true">
+    <Position X="10" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAIAAAABAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>DBSetting\Membership\Membership.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.DI.IoCContainer" Collapsed="true">
+    <Position X="17" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAACAAAAAAAAAAAgAAAABAAAAAAAACAAAAAA=</HashCode>
+      <FileName>DI\IoCContainer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.Observer.NotifyButton" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Observer\NotifyButton.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.Observer.ObservableFormTextField" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAAAAAAoAAAABAAAAEAAQAAAA=</HashCode>
+      <FileName>Observer\ObservableFormTextField.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.Properties.Resources" Collapsed="true">
+    <Position X="11.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAQAAAAACAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.Properties.Settings" Collapsed="true">
+    <Position X="13.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.Strategy.HandleUpdate" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Strategy\HandeUpdate.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.Strategy.HandleDelete" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Strategy\HandleDelete.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.Strategy.HandleInsert" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Strategy\HandleInsert.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SimpleEnterpriseFramework.Strategy.StrategyFactory" Collapsed="true">
+    <Position X="15.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAgAAAAAAAAAAAABABAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>Strategy\StrategyFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="SimpleEnterpriseFramework.Builders.UIBuilder.IBasicTextBox" Collapsed="true">
+    <Position X="11.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAgIAgAAAEAAQAQAAAkAAAAAAACgQAAAA=</HashCode>
+      <FileName>Builders\UIBuilder\IBasicTextBox.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="SimpleEnterpriseFramework.Builders.UIBuilder.IButton" Collapsed="true">
+    <Position X="13.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIggAgAAAACAQACAAAgCAAAAAACgAAAAA=</HashCode>
+      <FileName>Builders\UIBuilder\IButton.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="SimpleEnterpriseFramework.Builders.UIBuilder.IFormBuilder" Collapsed="true">
+    <Position X="15.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAABAAAAAAAAAAAAAAAAAgAAAAAIAAAAA=</HashCode>
+      <FileName>Builders\UIBuilder\IFormBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="SimpleEnterpriseFramework.DBSetting.Membership.CORs.IMembershipExecutor" Collapsed="true">
+    <Position X="10" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DBSetting\Membership\CORs\Executor\IMembershipExecutor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="SimpleEnterpriseFramework.Interfaces.Authenticate.IAuthenticateForm" Collapsed="true">
+    <Position X="10" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAAAAwAAAAAAAAAgAAAABAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\Authenticate\IAuthenticate.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="SimpleEnterpriseFramework.Observer.IObservable" Collapsed="true">
+    <Position X="11.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAAAAAAIAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Observer\IObservable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="SimpleEnterpriseFramework.Observer.IObserver" Collapsed="true">
+    <Position X="13.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Observer\IObserver.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="SimpleEnterpriseFramework.Strategy.IHandleDataStrategy" Collapsed="true">
+    <Position X="17" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Strategy\IHandleDataStrategy.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

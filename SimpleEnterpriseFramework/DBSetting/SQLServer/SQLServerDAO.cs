@@ -87,6 +87,7 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
 
             string sql = $"USE {database} UPDATE {strNameTable} SET ";
 
+
             // Construct the SET clause
             List<string> setClause = new List<string>();
             foreach (var entry in data)
@@ -106,6 +107,7 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
                 setclause2.Add($"{key} = '{data[key]}'");
             }
             sql += string.Join(" AND ", setclause2);
+            Console.WriteLine("sql" + sql);
 
             try
             {
@@ -118,7 +120,6 @@ namespace SimpleEnterpriseFramework.DBSetting.DAO
 
             return true;
         }
-
 
         public override bool DeleteData(Dictionary<string, string> data, string strNameTable, string database)
         {
